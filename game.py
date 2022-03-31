@@ -122,12 +122,12 @@ class Game:
       pressed = pygame.key.get_pressed()
       mods = pygame.key.get_mods()
 
-      if pressed[K_UP]: self.player.velocity[1] = -PLAYER_RUN_SPEED if mods & pygame.KMOD_SHIFT and Skills.RUN in self.player.skills else -PLAYER_MOVE_SPEED
-      elif pressed[K_DOWN]: self.player.velocity[1] = PLAYER_RUN_SPEED if mods & pygame.KMOD_SHIFT and Skills.RUN in self.player.skills else PLAYER_MOVE_SPEED
+      if pressed[pygame.K_w]: self.player.velocity[1] = -PLAYER_RUN_SPEED if mods & pygame.KMOD_SHIFT and Skills.RUN in self.player.skills else -PLAYER_MOVE_SPEED
+      elif pressed[pygame.K_s]: self.player.velocity[1] = PLAYER_RUN_SPEED if mods & pygame.KMOD_SHIFT and Skills.RUN in self.player.skills else PLAYER_MOVE_SPEED
       else: self.player.velocity[1] = 0
 
-      if pressed[K_LEFT]: self.player.velocity[0] = -PLAYER_RUN_SPEED if mods & pygame.KMOD_SHIFT and Skills.RUN in self.player.skills else -PLAYER_MOVE_SPEED
-      elif pressed[K_RIGHT]: self.player.velocity[0] = PLAYER_RUN_SPEED if mods & pygame.KMOD_SHIFT and Skills.RUN in self.player.skills else PLAYER_MOVE_SPEED
+      if pressed[pygame.K_a]: self.player.velocity[0] = -PLAYER_RUN_SPEED if mods & pygame.KMOD_SHIFT and Skills.RUN in self.player.skills else -PLAYER_MOVE_SPEED
+      elif pressed[pygame.K_d]: self.player.velocity[0] = PLAYER_RUN_SPEED if mods & pygame.KMOD_SHIFT and Skills.RUN in self.player.skills else PLAYER_MOVE_SPEED
       else: self.player.velocity[0] = 0
 
   def update(self, dt: float) -> None:
