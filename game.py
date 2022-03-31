@@ -103,6 +103,10 @@ class Game:
         elif event.key == K_ESCAPE and self.gameState == GameState.IN_GAME: self.gameState = GameState.PAUSE_MENU
         elif event.key == K_ESCAPE and self.gameState == GameState.PAUSE_MENU: self.gameState = GameState.MAIN_MENU
         elif event.key == K_0: self.puzzles['simonsays'].active = not self.puzzles['simonsays'].active
+        else:
+          for puzzle in self.puzzles.values():
+            if puzzle.active:
+              puzzle.handle_input(event)
         
       elif event.type == VIDEORESIZE:
         logging.info("Resizing screen to %sx%s", event.w, event.h)

@@ -38,3 +38,6 @@ def add_gem(player, gem) -> None:
 
 def check_gem(player, gem) -> bool:
   return gem in player.inventory
+
+def tile_object_to_rect(tile_object: pytmx.TiledObject) -> pygame.Rect:
+  return pygame.Rect(tile_object.x, tile_object.y, tile_object.width, tile_object.height)
