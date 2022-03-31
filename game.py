@@ -10,7 +10,7 @@ from turtle import Screen
 from typing import List
 
 import logging
-logging.basicConfig(format='[%(asctime)s] %(levelname)s: %(message)s', datefmt='%d/%m/%Y %H:%M:%S', level=logging.DEBUG)
+logging.basicConfig(format='[%(asctime)s] %(levelname)s: %(message)s', datefmt='%d/%m/%Y %H:%M:%S', level=logging.INFO)
 
 import pygame
 from pygame.locals import K_UP, K_DOWN, K_LEFT, K_RIGHT, K_MINUS, K_EQUALS, K_ESCAPE, K_r, K_0
@@ -91,6 +91,9 @@ class Game:
 
       elif event.type == UserEvents.PAUSE_BLINK.value:
         self.menus['pausemenu'].blink()
+      elif event.type == UserEvents.SIMON_SAYS_BLINK.value:
+        logging.info("Simon says blink message received")
+        self.puzzles['simonsays'].nextColor()
 
       elif event.type == pygame.MOUSEBUTTONDOWN:
         if event.button == 1 and self.gameState == GameState.MAIN_MENU: self.menus['mainmenu'].handle_click(event.pos)
@@ -104,10 +107,10 @@ class Game:
         elif event.key == K_ESCAPE and self.gameState == GameState.PAUSE_MENU: self.gameState = GameState.MAIN_MENU
         elif event.key == K_0: self.puzzles['simonsays'].active = not self.puzzles['simonsays'].active
         else:
-          if self.gameState == GameState.IN_GAME: self.menus['ingame'].handle_input(event)
+          if self.gameState == GameState.IN_GAME:
+            self.menus['ingame'].handle_input(event)
           for puzzle in self.puzzles.values():
-            if puzzle.active:
-              puzzle.handle_input(event)
+            puzzle.handle_input(event)
         
       elif event.type == VIDEORESIZE:
         logging.info("Resizing screen to %sx%s", event.w, event.h)
@@ -132,6 +135,9 @@ class Game:
 
   def update(self, dt: float) -> None:
     self.menus['ingame'].update(dt)
+    for puzzle in self.puzzles.values():
+      if puzzle.active:
+        puzzle.update(dt)
 
   def run(self) -> None:
     """
@@ -154,12 +160,12 @@ class Game:
       self.running = False
 
 def main() -> None:
-  logging.debug("Python version: " + str(sys.version))
-  logging.debug("Pygame version: " + str(pygame.version.ver))
-  logging.debug("Pytmx version: " + str(pytmx.__version__))
-  logging.debug("Pyscroll version: " + str(pyscroll.__version__))
-  logging.debug("Current Process ID: " + str(os.getpid()))
-  logging.debug("Current Parent Process ID: " + str(os.getppid()))
+  logging.info("Python version: " + str(sys.version))
+  logging.info("Pygame version: " + str(pygame.version.ver))
+  logging.info("Pytmx version: " + str(pytmx.__version__))
+  logging.info("Pyscroll version: " + str(pyscroll.__version__))
+  logging.info("Current Process ID: " + str(os.getpid()))
+  logging.info("Current Parent Process ID: " + str(os.getppid()))
 
   pygame.init()
   logging.info("Pygame initialized")
@@ -167,11 +173,14 @@ def main() -> None:
   pygame.font.init()
   logging.info("Pygame font module initialized")
 
+  pygame.mixer.init()
+  logging.info("Pygame mixer module initialized")
+
   screen = initialize_screen(1280, 720)
   logging.info("Initialized screen")
 
   pygame.display.set_caption('Swish and Frick')
-  logging.debug("Set window title to: " + str(pygame.display.get_caption()[0]))
+  logging.info("Set window title to: " + str(pygame.display.get_caption()[0]))
 
   try:
     game = Game(screen)

@@ -15,7 +15,7 @@ def resource_path(relative_path):
 
 def initialize_screen(width: int, height: int) -> pygame.Surface:
   screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
-  logging.debug("Initialized screen with size %s", screen.get_size())
+  logging.info("Initialized screen with size %s", screen.get_size())
   return screen
 
 def load_image(filename: str) -> pygame.Surface:

@@ -29,3 +29,4 @@ class Skills(enum.Enum):
 @enum.unique
 class UserEvents(enum.IntEnum):
   PAUSE_BLINK = pygame.USEREVENT
+  SIMON_SAYS_BLINK = enum.auto()
