@@ -1,0 +1,7 @@
+from pathlib import Path
+
+CURRENT_DIR = Path(__file__).parent
+RESOURCES_DIR = CURRENT_DIR / "data"
+PAUSE_BLINK_TIME_MS = 700
+PLAYER_MOVE_SPEED = 200
+PLAYER_RUN_SPEED = 400
