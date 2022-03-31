@@ -259,4 +259,4 @@ class Ingame:
       if sprite.feet.colliderect(self.music_button_four_range) and self.f_key_pressed == True:
         self.f_key_pressed = False
         pygame.mixer.music.load(resource_path( RESOURCES_DIR / "sounds/notes4.wav" ))
-        pygame.mixer.music.play()
+        pygame.mixer.music.play() 
