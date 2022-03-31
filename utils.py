@@ -28,8 +28,11 @@ def set_layer_visibilty(tmx_data: pytmx.TiledMap, map_layer: pyscroll.BufferedRe
   tmx_data.get_layer_by_name(layerName).visible = visible
   map_layer.data.tmx = tmx_data
   map_layer.redraw_tiles(map_layer._buffer)
-  logging.info(f"Set {layerName} visible to {visible}")
+  # logging.info(f"Set {layerName} visible to {visible}")
   return
+
+def get_layer_visibility(tmx_data: pytmx.TiledMap, layerName: str) -> bool:
+  return tmx_data.get_layer_by_name(layerName).visible
 
 def add_skill(player, skill) -> None:
   if not check_skill(player, skill):
