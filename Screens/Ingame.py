@@ -1,6 +1,6 @@
 import pygame
 from enums import Skills, Gems
-from utils import getFontAtSize, set_layer_visibilty, check_gem, add_gem, tile_object_to_rect
+from utils import add_skill, check_skill, getFontAtSize, set_layer_visibilty, check_gem, add_gem, tile_object_to_rect
 from constants import PAUSE_BLINK_TIME_MS
 
 from MenuButton import MenuButton
@@ -43,6 +43,10 @@ class Ingame:
     self.button_door_one_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("button_door_one_collider")[0])
     self.button__one_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("button__one_range")[0])
     
+    self.konami_code = [pygame.K_UP, pygame.K_UP, pygame.K_DOWN, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_b, pygame.K_a]
+    self.komani_code_entered = []
+    self.konami_code_index = 0
+    self.komani_code_completed = False
     self.konami_text_show = False
 
     
@@ -57,6 +61,20 @@ class Ingame:
       if event.key == pygame.K_f:
         self.f_key_pressed = True
         logging.info("f down")
+      
+      elif not self.komani_code_completed:
+        if event.key == self.konami_code[self.konami_code_index]:
+          self.komani_code_entered.append(event.key)
+          self.konami_code_index += 1
+
+          logging.info(f"Konami code index: {self.konami_code_index} / {len(self.konami_code)} | {self.konami_code[self.konami_code_index-1]}")
+          if self.konami_code == self.komani_code_entered:
+            logging.info("Konami code entered correctly")
+            self.komani_code_completed = True
+            if not check_skill(self.game.player, Skills.SWIM):
+              logging.info("Komani code entered correctly, adding swim skill")
+              add_skill(self.game.player, Skills.SWIM)
+
     elif event.type == pygame.KEYUP:
       if event.key == pygame.K_f:
         self.f_key_pressed = False
