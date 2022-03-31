@@ -83,6 +83,10 @@ class Ingame:
   def update(self, dt: float) -> None:
     self.game.group.update(dt)
 
+    def add_and_hide_skill(layername: str, skill: Skills) -> None:
+      set_layer_visibilty(self.game.tmx_data, self.game.map_layer, layername, False)
+      add_skill(sprite, skill)
+
     def add_and_hide_gem(layername: str, gem: Gems) -> None:
       set_layer_visibilty(self.game.tmx_data, self.game.map_layer, layername, False)
       add_gem(sprite, gem)
@@ -106,7 +110,7 @@ class Ingame:
       if sprite.feet.colliderect(self.pink_gem_collider) and not check_gem(sprite, Gems.PINK): add_and_hide_gem("pink_gem", Gems.PINK)
       if sprite.feet.colliderect(self.lemon_gem_collider) and not check_gem(sprite, Gems.LEMON): add_and_hide_gem("lemon_gem", Gems.LEMON)
       if sprite.feet.colliderect(self.gear_collider) and not check_gem(sprite, Gems.GEAR): add_and_hide_gem("gear", Gems.GEAR)
-      if sprite.feet.colliderect(self.boots_collider) and not check_gem(sprite, Gems.BOOTS): add_and_hide_gem("boots", Gems.BOOTS)
+      if sprite.feet.colliderect(self.boots_collider) and not check_skill(sprite, Skills.RUN): add_and_hide_skill("boots", Skills.RUN)
       if sprite.feet.colliderect(self.red_key_collider) and not check_gem(sprite, Gems.KEY): add_and_hide_gem("red_key", Gems.KEY)
       if sprite.feet.colliderect(self.red_key_door_collider) and not check_gem(sprite, Gems.KEY): sprite.move_back(dt)
       if sprite.feet.colliderect(self.red_key_range) and check_gem(sprite, Gems.KEY): hide_layer("red_key_door")
@@ -118,4 +122,4 @@ class Ingame:
         hide_layer("button_door_one")
         self.door_one_time = pygame.time.get_ticks() + 2000
       if sprite.feet.colliderect(self.button_door_one_collider) and pygame.time.get_ticks() > self.door_one_time: sprite.move_back(dt)
-      if pygame.time.get_ticks() > self.door_one_time: show_layer("button_door_one")
+      # if pygame.time.get_ticks() > self.door_one_time: show_layer("button_door_one")
