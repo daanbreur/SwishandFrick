@@ -17,6 +17,9 @@ class Gems(enum.Enum):
   ORANGE = enum.auto()
   PINK = enum.auto()
   LEMON = enum.auto()
+  GEAR = enum.auto()
+  BOOTS = enum.auto()
+  KEY = enum.auto()
 
 @enum.unique
 class Skills(enum.Enum):

@@ -28,12 +28,19 @@ def set_layer_visibilty(tmx_data: pytmx.TiledMap, map_layer: pyscroll.BufferedRe
   tmx_data.get_layer_by_name(layerName).visible = visible
   map_layer.data.tmx = tmx_data
   map_layer.redraw_tiles(map_layer._buffer)
+  logging.info(f"Set {layerName} visible to {visible}")
   return
 
 def add_gem(player, gem) -> None:
   if not check_gem(player, gem):
     logging.info(f"add_gem {gem} to {player.inventory}")
     player.inventory.append(gem)
+  return
+  
+def remove_gem(player, gem) -> None:
+  if not check_gem(player, gem):
+    logging.info(f"remove_gem {gem} from {player.inventory}")
+    player.inventory.remove(gem)
   return
 
 def check_gem(player, gem) -> bool:

@@ -20,11 +20,11 @@ class SimonSays():
     self.sequence = []
     self.enteredSequence = []
 
-    self.red_button_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("x")[0])
-    self.blue_button_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("x")[0])
-    self.green_button_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("x")[0])
-    self.yellow_button_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("x")[0])
-    self.reset_button_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("x")[0])
+    self.red_button_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("simon_red_range")[0])
+    self.blue_button_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("simon_blue_range")[0])
+    self.green_button_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("simon_green_range")[0])
+    self.yellow_button_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("simon_yellow_range")[0])
+    self.reset_button_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("simon_reset_range")[0])
 
     return
 
