@@ -31,6 +31,15 @@ def set_layer_visibilty(tmx_data: pytmx.TiledMap, map_layer: pyscroll.BufferedRe
   logging.info(f"Set {layerName} visible to {visible}")
   return
 
+def add_skill(player, skill) -> None:
+  if not check_skill(player, skill):
+    logging.info(f"add_skill {skill} to {player.skills}")
+    player.skills.append(skill)
+  return
+
+def check_skill(player, skill) -> bool:
+  return skill in player.skills
+
 def add_gem(player, gem) -> None:
   if not check_gem(player, gem):
     logging.info(f"add_gem {gem} to {player.inventory}")
