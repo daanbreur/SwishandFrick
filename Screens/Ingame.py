@@ -432,6 +432,7 @@ class Ingame:
 
       if sprite.feet.colliderect(self.mors_button_red_range) and self.f_key_pressed == True:
         self.f_key_pressed = False
+        show_layer("puzzle_door")
         show_layer("puzzle_door_four")
         logging.info("Resetting morsegame")
         self.morse_entered = []
@@ -444,6 +445,7 @@ class Ingame:
         if self.morse_required == self.morse_entered:
           self.morse_completed = True
           hide_layer("puzzle_door_four")
+          hide_layer("puzzle_door")
           logging.info("Morse Completed, Opening Door")	
       if sprite.feet.colliderect(self.mors_button_two_range) and self.f_key_pressed == True:
         self.f_key_pressed = False
@@ -452,6 +454,7 @@ class Ingame:
         if self.morse_required == self.morse_entered:
           self.morse_completed = True
           hide_layer("puzzle_door_four")
+          hide_layer("puzzle_door")
           logging.info("Morse Completed, Opening Door")
       if sprite.feet.colliderect(self.mors_button_three_range) and self.f_key_pressed == True:
         self.f_key_pressed = False
@@ -460,6 +463,7 @@ class Ingame:
         if self.morse_required == self.morse_entered:
           self.morse_completed = True
           hide_layer("puzzle_door_four")
+          hide_layer("puzzle_door")
           logging.info("Morse Completed, Opening Door")
       if sprite.feet.colliderect(self.mors_button_four_range) and self.f_key_pressed == True:
         self.f_key_pressed = False
@@ -468,6 +472,7 @@ class Ingame:
         if self.morse_required == self.morse_entered:
           self.morse_completed = True
           hide_layer("puzzle_door_four")
+          hide_layer("puzzle_door")
           logging.info("Morse Completed, Opening Door")
       if sprite.feet.colliderect(self.mors_button_five_range) and self.f_key_pressed == True:
         self.f_key_pressed = False
@@ -476,6 +481,7 @@ class Ingame:
         if self.morse_required == self.morse_entered:
           self.morse_completed = True
           hide_layer("puzzle_door_four")
+          hide_layer("puzzle_door")
           logging.info("Morse Completed, Opening Door")
       if sprite.feet.colliderect(self.mors_button_six_range) and self.f_key_pressed == True:
         self.f_key_pressed = False
@@ -484,4 +490,5 @@ class Ingame:
         if self.morse_required == self.morse_entered:
           self.morse_completed = True
           hide_layer("puzzle_door_four")
+          hide_layer("puzzle_door")
           logging.info("Morse Completed, Opening Door")
