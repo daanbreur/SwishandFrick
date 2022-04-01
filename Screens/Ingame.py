@@ -28,6 +28,9 @@ class Ingame:
     
     self.gem_door_opened = False
     self.music_door_opened = False
+    self.gear_wall_opened = False
+    self.water_wall_opened = False 
+
 
     self.walls = []
     for obj in self.game.tmx_data.get_layer_by_name("walls")[:]: 
@@ -58,6 +61,16 @@ class Ingame:
     for obj in self.game.tmx_data.get_layer_by_name("soft_wall_high_collider")[:]:
       logging.info(f"Created Soft Wall High Collider at {obj.x}, {obj.y} with dimensions {obj.width}, {obj.height}")
       self.soft_wall_high_collider.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
+    
+    self.gear_wall_collider = []
+    for obj in self.game.tmx_data.get_layer_by_name("gear_wall_collider")[:]:
+      logging.info(f"Created Gear Wall Collider at {obj.x}, {obj.y} with dimensions {obj.width}, {obj.height}")
+      self.gear_wall_collider.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
+
+    self.shallow_water_finish = []
+    for obj in self.game.tmx_data.get_layer_by_name("shallow_water_finish")[:]:
+      logging.info(f"Created Shallow Water Finish at {obj.x}, {obj.y} with dimensions {obj.width}, {obj.height}")
+      self.shallow_water_finish.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
     
     self.blue_gem_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("blue_gem_collider")[0])
     self.red_gem_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("red_gem_collider")[0])
@@ -125,6 +138,9 @@ class Ingame:
     self.mors_button_six_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("mors_button_six_range")[0])
 
     self.final_gem_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("final_gem_door_collider")[0])
+    self.final_gem_button_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("final_gem_button_range")[0])
+
+    self.gear_wall_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("gear_wall_range")[0])
 
     self.konami_code = [pygame.K_UP, pygame.K_UP, pygame.K_DOWN, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_b, pygame.K_a]
     self.komani_code_entered = []
@@ -140,7 +156,7 @@ class Ingame:
     self.music_index = 0
     self.music_completed = False
 
-    self.math_required = [3, 2, 4, 1]
+    self.math_required = [3, 4, 1, 2]
     self.math_entered = []
     self.math_completed = False
 
@@ -221,10 +237,21 @@ class Ingame:
       if sprite.feet.collidelist(self.soft_wall_high_range) > -1 and check_skill(sprite, Skills.HAMMER): hide_layer("soft_wall_high")
       if sprite.feet.collidelist(self.soft_wall_high_collider) > -1 and not check_skill(sprite, Skills.HAMMER): sprite.move_back(dt)
 
+      if sprite.feet.colliderect(self.gear_wall_range) and check_gem(sprite, Gems.GEAR):
+        self.gear_wall_opened = True
+        hide_layer("gear_wall")
+      if sprite.feet.collidelist(self.gear_wall_collider) > -1 and not self.gear_wall_opened: sprite.move_back(dt)
+
       if sprite.feet.colliderect(self.gem_door_range) and check_gem(sprite, Gems.BLUE) and check_gem(sprite, Gems.RED) and check_gem(sprite, Gems.GREEN): 
         self.gem_door_opened = True
         hide_layer("gem_door_one")
       if sprite.feet.colliderect(self.gem_door_collider) and not self.gem_door_opened: sprite.move_back(dt)
+
+      if sprite.feet.colliderect(self.final_gem_button_range) and check_gem(sprite, Gems.ORANGE) and check_gem(sprite, Gems.LEMON) and check_gem(sprite, Gems.PURPLE) and check_gem(sprite, Gems.PINK) and self.f_key_pressed == True:
+        self.f_key_pressed = False
+        self.water_wall_opened = True
+        hide_layer("water_empty")
+      if sprite.feet.collidelist(self.shallow_water_finish) > -1 and not self.water_wall_opened: sprite.move_back(dt)
 
       if sprite.feet.colliderect(self.lever_complete_range) and self.lever_lever_one_enabled and self.lever_lever_two_enabled and not self.lever_lever_three_enabled and not self.lever_lever_four_enabled and not self.lever_lever_five_enabled and self.lever_lever_six_enabled:
         add_skill(sprite, Skills.HAMMER)
@@ -371,6 +398,11 @@ class Ingame:
           logging.info("Music Completed, Opening Door")	
         pygame.mixer.music.load(resource_path( RESOURCES_DIR / "sounds/notes4.wav" ))
         pygame.mixer.music.play() 
+      if self.music_required == self.music_entered:
+          self.music_completed = True
+      else: 
+        self.music_completed = False
+        show_layer("puzzle_door_two")
 
       if sprite.feet.colliderect(self.beach_door_collider) and not self.music_completed: sprite.move_back(dt)
       if sprite.feet.colliderect(self.beach_button_range) and self.f_key_pressed == True:
@@ -423,6 +455,8 @@ class Ingame:
           self.math_completed = True
           hide_layer("puzzle_door_three")
           logging.info("Math Completed, Opening Door")	
+      if self.math_required == self.math_entered: self.math_completed = True
+      else: self.math_completed = False
 
       if sprite.feet.colliderect(self.mors_button_blue_range) and self.f_key_pressed == True:
         self.f_key_pressed = False
@@ -492,3 +526,4 @@ class Ingame:
           hide_layer("puzzle_door_four")
           hide_layer("puzzle_door")
           logging.info("Morse Completed, Opening Door")
+      
