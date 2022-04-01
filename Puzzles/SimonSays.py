@@ -37,19 +37,20 @@ class SimonSays():
 
   def draw(self, screen: pygame.Surface) -> None:
     if self.showColor:
-      logging.info(f"Sequence: {self.sequence} | Index: {self.showColorIndex} | Show Color: {self.sequence[self.showColorIndex]}")
-      if self.sequence[self.showColorIndex] == SimonSaysButtons.RED: screen.fill((255, 0, 0))
-      if self.sequence[self.showColorIndex] == SimonSaysButtons.BLUE: screen.fill((0, 0, 255))
-      if self.sequence[self.showColorIndex] == SimonSaysButtons.GREEN: screen.fill((0, 255, 0))
-      if self.sequence[self.showColorIndex] == SimonSaysButtons.YELLOW: screen.fill((255, 255, 0))
+      if not self.showColorIndex > len(self.sequence)-1:
+        logging.info(f"Sequence: {self.sequence} | Index: {self.showColorIndex} | Show Color: {self.sequence[self.showColorIndex]}")
+        if self.sequence[self.showColorIndex] == SimonSaysButtons.RED: screen.fill((255, 0, 0))
+        if self.sequence[self.showColorIndex] == SimonSaysButtons.BLUE: screen.fill((0, 0, 255))
+        if self.sequence[self.showColorIndex] == SimonSaysButtons.GREEN: screen.fill((0, 255, 0))
+        if self.sequence[self.showColorIndex] == SimonSaysButtons.YELLOW: screen.fill((255, 255, 0))
   
   def update(self, df: float) -> None:
-    logging.info(f"Simon Says: {self.sequence} | Submitted: {self.enteredSequence}")
     if self.active:
       if len(self.sequence) == len(self.enteredSequence):
         if self.sequence == self.enteredSequence:
           if len(self.enteredSequence) < 5:
             self.sequence.append(random.choice(list(SimonSaysButtons)))
+            logging.info("New Sequence: %s" % str(self.sequence))
             self.enteredSequence = []
             self.showColorIndex = 0
             self.showColor = True
@@ -70,6 +71,7 @@ class SimonSays():
 
   def reset(self) -> None:
     if not self.solved:
+      self.showColor = True
       self.sequence = [random.choice(list(SimonSaysButtons))]
       self.enteredSequence = []
 

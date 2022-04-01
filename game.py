@@ -3,6 +3,8 @@ from distutils.spawn import spawn
 
 import sys
 import os
+
+from ToastManager import ToastManager
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
 from pathlib import Path
@@ -46,7 +48,7 @@ class Game:
     
     self.tmx_data = load_pygame(self.map_path)
 
-    self.player = Player()
+    self.player = Player(self)
     spawnObj = self.tmx_data.get_layer_by_name("spawn")[0]
     self.player.position = (spawnObj.x-spawnObj.width/2, spawnObj.y)
 
@@ -61,6 +63,8 @@ class Game:
     # Make Pyscroll group
     self.group = PyscrollGroup(map_layer=self.map_layer, default_layer=50)
     self.group.add(self.player)
+
+    self.toastManager = ToastManager(self.screen)
 
     self.puzzles = {
       'simonsays': SimonSays(self),
@@ -82,6 +86,7 @@ class Game:
       for puzzle in self.puzzles.values():
         if puzzle.active:
           puzzle.draw(self.screen)
+      self.toastManager.draw(self.screen)
 
   def handle_input(self) -> None:
     for event in pygame.event.get():
@@ -92,7 +97,6 @@ class Game:
       elif event.type == UserEvents.PAUSE_BLINK.value:
         self.menus['pausemenu'].blink()
       elif event.type == UserEvents.SIMON_SAYS_BLINK.value:
-        logging.info("Simon says blink message received")
         self.puzzles['simonsays'].nextColor()
 
       elif event.type == pygame.MOUSEBUTTONDOWN:
