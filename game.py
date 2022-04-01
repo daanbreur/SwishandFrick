@@ -92,7 +92,6 @@ class Game:
       elif event.type == UserEvents.PAUSE_BLINK.value:
         self.menus['pausemenu'].blink()
       elif event.type == UserEvents.SIMON_SAYS_BLINK.value:
-        logging.info("Simon says blink message received")
         self.puzzles['simonsays'].nextColor()
 
       elif event.type == pygame.MOUSEBUTTONDOWN:

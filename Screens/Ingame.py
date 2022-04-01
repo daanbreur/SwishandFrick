@@ -1,3 +1,4 @@
+from re import S
 import pygame
 from enums import Skills, Gems
 from utils import add_skill, check_skill, get_layer_visibility, getFontAtSize, resource_path, set_layer_visibilty, check_gem, add_gem, tile_object_to_rect
@@ -38,6 +39,26 @@ class Ingame:
       logging.info(f"Created Shallowwater at {obj.x}, {obj.y} with dimensions {obj.width}, {obj.height}")
       self.shallowwater.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
     
+    self.soft_wall_low_range = []
+    for obj in self.game.tmx_data.get_layer_by_name("soft_wall_low_range")[:]:
+      logging.info(f"Created Soft Wall Low Range at {obj.x}, {obj.y} with dimensions {obj.width}, {obj.height}")
+      self.soft_wall_low_range.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
+
+    self.soft_wall_high_range = []
+    for obj in self.game.tmx_data.get_layer_by_name("soft_wall_high_range")[:]:
+      logging.info(f"Created Soft Wall High Range at {obj.x}, {obj.y} with dimensions {obj.width}, {obj.height}")
+      self.soft_wall_high_range.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
+
+    self.soft_wall_low_collider = []
+    for obj in self.game.tmx_data.get_layer_by_name("soft_wall_low_collider")[:]:
+      logging.info(f"Created Soft Wall Low Collider at {obj.x}, {obj.y} with dimensions {obj.width}, {obj.height}")
+      self.soft_wall_low_collider.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
+
+    self.soft_wall_high_collider = []
+    for obj in self.game.tmx_data.get_layer_by_name("soft_wall_high_collider")[:]:
+      logging.info(f"Created Soft Wall High Collider at {obj.x}, {obj.y} with dimensions {obj.width}, {obj.height}")
+      self.soft_wall_high_collider.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
+    
     self.blue_gem_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("blue_gem_collider")[0])
     self.red_gem_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("red_gem_collider")[0])
     self.purple_gem_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("purple_gem_collider")[0])
@@ -62,9 +83,13 @@ class Ingame:
     self.simon_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("simon_door_collider")[0])
     self.puzzle_door_one = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("levers_door_collider")[0])
     self.simon_sign_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("simon_sign_range")[0])
+    self.beach_sign_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("beach_sign_range")[0])
     self.lever_complete_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("lever_complete_range")[0])
     self.music_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("music_door_collider")[0])
     self.gem_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("gem_door_collider")[0])
+    self.beach_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("beach_door_collider")[0])
+
+    self.hamer_lever_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("hamer_lever_range")[0])
 
     self.music_button_green_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("music_button_green_range")[0])
     self.music_button_one_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("music_button_one_range")[0])
@@ -73,6 +98,11 @@ class Ingame:
     self.music_button_four_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("music_button_four_range")[0])
     self.music_button_red_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("music_button_red_range")[0])
 
+    self.math_button_red_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("math_button_red_range")[0])
+    self.math_button_one_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("math_button_one_range")[0])
+    self.math_button_two_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("math_button_two_range")[0])
+    self.math_button_three_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("math_button_three_range")[0])
+    self.math_button_four_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("math_button_four_range")[0])
 
     self.lever_lever_one_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("lever_lever_one_range")[0])
     self.lever_lever_two_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("lever_lever_two_range")[0])
@@ -81,12 +111,42 @@ class Ingame:
     self.lever_lever_five_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("lever_lever_five_range")[0])
     self.lever_lever_six_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("lever_lever_six_range")[0])
 
+    self.mors_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("mors_door_collider")[0])
+    self.math_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("math_door_collider")[0])
+    self.beach_button_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("beach_button_range")[0])
+
+    self.mors_button_red_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("mors_button_red_range")[0])
+    self.mors_button_blue_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("mors_button_blue_range")[0])
+    self.mors_button_one_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("mors_button_one_range")[0])
+    self.mors_button_two_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("mors_button_two_range")[0])
+    self.mors_button_three_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("mors_button_three_range")[0])
+    self.mors_button_four_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("mors_button_four_range")[0])
+    self.mors_button_five_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("mors_button_five_range")[0])
+    self.mors_button_six_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("mors_button_six_range")[0])
+
+    self.final_gem_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("final_gem_door_collider")[0])
+
     self.konami_code = [pygame.K_UP, pygame.K_UP, pygame.K_DOWN, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_b, pygame.K_a]
     self.komani_code_entered = []
     self.konami_code_index = 0
     self.komani_code_completed = False
+
     self.konami_text_show = False
     self.simon_text_show = False
+    self.math_text_show = False
+    
+    self.music_required = [1,2,3,2,1,2,3,2,1,3,4,4,4,4,4,3]
+    self.music_entered = []
+    self.music_index = 0
+    self.music_completed = False
+
+    self.math_required = [3, 2, 4, 1]
+    self.math_entered = []
+    self.math_completed = False
+
+    self.morse_required = [4,3,6,5,1,2]
+    self.morse_entered = []
+    self.morse_completed = False
     
   def draw(self, screen) -> None:
     self.game.group.center(self.game.player.rect.center)
@@ -95,6 +155,10 @@ class Ingame:
     if self.konami_text_show: screen.blit(sign_one, (screen.get_width()/2, screen.get_height()/2 - sign_one.get_height()/2 - 50))
     sign_two = self.font.render("RRLLLR", False, (255, 255, 255))
     if self.simon_text_show: screen.blit(sign_two, (screen.get_width()/2, screen.get_height()/2 - sign_two.get_height()/2 - 50))
+    sign_three = self.font.render("(((wortel van 6.512.704) + 7)/3)*4", False, (255, 255, 255))
+    if self.math_text_show: screen.blit(sign_three, (screen.get_width()/2, screen.get_height()/2 - sign_three.get_height()/2 - 50))
+
+
 
   def handle_input(self, event) -> None:
     if event.type == pygame.KEYDOWN:
@@ -152,20 +216,28 @@ class Ingame:
       if sprite.feet.colliderect(self.red_key_door_collider) and not check_gem(sprite, Gems.KEY): sprite.move_back(dt)
       if sprite.feet.colliderect(self.red_key_range) and check_gem(sprite, Gems.KEY): hide_layer("red_key_door")
 
+      if sprite.feet.collidelist(self.soft_wall_low_range) > -1 and check_skill(sprite, Skills.HAMMER): hide_layer("soft_wall_low")
+      if sprite.feet.collidelist(self.soft_wall_low_collider) > -1 and not check_skill(sprite, Skills.HAMMER): sprite.move_back(dt)
+      if sprite.feet.collidelist(self.soft_wall_high_range) > -1 and check_skill(sprite, Skills.HAMMER): hide_layer("soft_wall_high")
+      if sprite.feet.collidelist(self.soft_wall_high_collider) > -1 and not check_skill(sprite, Skills.HAMMER): sprite.move_back(dt)
+
       if sprite.feet.colliderect(self.gem_door_range) and check_gem(sprite, Gems.BLUE) and check_gem(sprite, Gems.RED) and check_gem(sprite, Gems.GREEN): 
         self.gem_door_opened = True
         hide_layer("gem_door_one")
       if sprite.feet.colliderect(self.gem_door_collider) and not self.gem_door_opened: sprite.move_back(dt)
 
       if sprite.feet.colliderect(self.lever_complete_range) and self.lever_lever_one_enabled and self.lever_lever_two_enabled and not self.lever_lever_three_enabled and not self.lever_lever_four_enabled and not self.lever_lever_five_enabled and self.lever_lever_six_enabled:
-        self.music_door_opened = True
-        hide_layer("lever_door_three")
+        add_skill(sprite, Skills.HAMMER)
+      
       if sprite.feet.colliderect(self.music_door_collider) and not self.music_door_opened: sprite.move_back(dt)
+      if sprite.feet.colliderect(self.final_gem_door_collider) and not self.morse_completed: sprite.move_back(dt)
 
       if sprite.feet.colliderect(self.konami_sign): self.konami_text_show = True 
       else: self.konami_text_show = False
       if sprite.feet.colliderect(self.simon_sign_range): self.simon_text_show = True 
       else: self.simon_text_show = False
+      if sprite.feet.colliderect(self.beach_sign_range): self.math_text_show = True
+      else: self.math_text_show = False
 
       if sprite.feet.colliderect(self.button__one_range) and self.f_key_pressed == True:
         hide_layer("button_door_one")
@@ -238,25 +310,178 @@ class Ingame:
         logging.info("Levers Enabled: %s %s %s %s %s %s" % (self.lever_lever_one_enabled, self.lever_lever_two_enabled, self.lever_lever_three_enabled, self.lever_lever_four_enabled, self.lever_lever_five_enabled, self.lever_lever_six_enabled))
         set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "lever_puzzle_six", not get_layer_visibility(self.game.tmx_data, "lever_puzzle_six"))
 
+      if sprite.feet.colliderect(self.hamer_lever_range) and self.f_key_pressed == True:
+        self.f_key_pressed = False
+        self.music_door_opened = not self.music_door_opened
+        logging.info("Music Door: %s" % self.music_door_opened)
+        set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "lever_hamer", not get_layer_visibility(self.game.tmx_data, "lever_hamer"))
+        set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "lever_door_three", not get_layer_visibility(self.game.tmx_data, "lever_door_three"))
+
 
       if sprite.feet.colliderect(self.music_button_green_range) and self.f_key_pressed == True:
         self.f_key_pressed = False
+        logging.info("Playing music for musicgame")
         pygame.mixer.music.load(resource_path( RESOURCES_DIR / "sounds/songlevel.wav" ))
         pygame.mixer.music.play()
+
+      if sprite.feet.colliderect(self.music_button_red_range) and self.f_key_pressed == True:
+        self.f_key_pressed = False
+        show_layer("puzzle_door_two")
+        logging.info("Resetting musicgame")
+        self.music_entered = []
+        self.music_completed = False
       
       if sprite.feet.colliderect(self.music_button_one_range) and self.f_key_pressed == True:
         self.f_key_pressed = False
+        self.music_entered.append(1)
+        logging.info("Music Notes Entered: %s" % self.music_entered)
+        if self.music_required == self.music_entered:
+          self.music_completed = True
+          hide_layer("puzzle_door_two")
+          logging.info("Music Completed, Opening Door")	
         pygame.mixer.music.load(resource_path( RESOURCES_DIR / "sounds/notes1.wav" ))
         pygame.mixer.music.play()
       if sprite.feet.colliderect(self.music_button_two_range) and self.f_key_pressed == True:
         self.f_key_pressed = False
+        self.music_entered.append(2)
+        logging.info("Music Notes Entered: %s" % self.music_entered)
+        if self.music_required == self.music_entered:
+          self.music_completed = True
+          hide_layer("puzzle_door_two")
+          logging.info("Music Completed, Opening Door")	
         pygame.mixer.music.load(resource_path( RESOURCES_DIR / "sounds/notes2.wav" ))
         pygame.mixer.music.play()
       if sprite.feet.colliderect(self.music_button_three_range) and self.f_key_pressed == True:
         self.f_key_pressed = False
+        self.music_entered.append(3)
+        logging.info("Music Notes Entered: %s" % self.music_entered)
+        if self.music_required == self.music_entered:
+          self.music_completed = True
+          hide_layer("puzzle_door_two")
+          logging.info("Music Completed, Opening Door")	
         pygame.mixer.music.load(resource_path( RESOURCES_DIR / "sounds/notes3.wav" ))
         pygame.mixer.music.play()
       if sprite.feet.colliderect(self.music_button_four_range) and self.f_key_pressed == True:
         self.f_key_pressed = False
+        self.music_entered.append(4)
+        logging.info("Music Notes Entered: %s" % self.music_entered)
+        if self.music_required == self.music_entered:
+          self.music_completed = True
+          hide_layer("puzzle_door_two")
+          logging.info("Music Completed, Opening Door")	
         pygame.mixer.music.load(resource_path( RESOURCES_DIR / "sounds/notes4.wav" ))
         pygame.mixer.music.play() 
+
+      if sprite.feet.colliderect(self.beach_door_collider) and not self.music_completed: sprite.move_back(dt)
+      if sprite.feet.colliderect(self.beach_button_range) and self.f_key_pressed == True:
+        hide_layer("puzzle_door")
+        self.door_one_time = pygame.time.get_ticks() + 12000
+      if sprite.feet.colliderect(self.math_door_collider):
+        if self.morse_completed:
+          pass
+        elif pygame.time.get_ticks() > self.door_one_time: sprite.move_back(dt)
+      if pygame.time.get_ticks() > self.door_one_time and not self.morse_completed: show_layer("puzzle_door")
+
+      if sprite.feet.colliderect(self.mors_door_collider) and not self.math_entered: sprite.move_back(dt)
+
+      if sprite.feet.colliderect(self.math_button_red_range) and self.f_key_pressed == True:
+        self.f_key_pressed = False
+        show_layer("puzzle_door_three")
+        logging.info("Resetting mathgame")
+        self.math_entered = []
+        self.math_completed = False
+      
+      if sprite.feet.colliderect(self.math_button_one_range) and self.f_key_pressed == True:
+        self.f_key_pressed = False
+        self.math_entered.append(1)
+        logging.info("Math Entered: %s" % self.math_entered)
+        if self.math_required == self.math_entered:
+          self.math_completed = True
+          hide_layer("puzzle_door_three")
+          logging.info("Math Completed, Opening Door")	
+      if sprite.feet.colliderect(self.math_button_two_range) and self.f_key_pressed == True:
+        self.f_key_pressed = False
+        self.math_entered.append(2)
+        logging.info("Math Entered: %s" % self.math_entered)
+        if self.math_required == self.math_entered:
+          self.math_completed = True
+          hide_layer("puzzle_door_three")
+          logging.info("Math Completed, Opening Door")	
+      if sprite.feet.colliderect(self.math_button_three_range) and self.f_key_pressed == True:
+        self.f_key_pressed = False
+        self.math_entered.append(3)
+        logging.info("Math Entered: %s" % self.math_entered)
+        if self.math_required == self.math_entered:
+          self.math_completed = True
+          hide_layer("puzzle_door_three")
+          logging.info("Math Completed, Opening Door")
+      if sprite.feet.colliderect(self.math_button_four_range) and self.f_key_pressed == True:
+        self.f_key_pressed = False
+        self.math_entered.append(4)
+        logging.info("Math Entered: %s" % self.math_entered)
+        if self.math_required == self.math_entered:
+          self.math_completed = True
+          hide_layer("puzzle_door_three")
+          logging.info("Math Completed, Opening Door")	
+
+      if sprite.feet.colliderect(self.mors_button_blue_range) and self.f_key_pressed == True:
+        self.f_key_pressed = False
+        logging.info("Playing music for morsegame")
+        pygame.mixer.music.load(resource_path( RESOURCES_DIR / "sounds/morselevel.wav" ))
+        pygame.mixer.music.play()
+
+      if sprite.feet.colliderect(self.mors_button_red_range) and self.f_key_pressed == True:
+        self.f_key_pressed = False
+        show_layer("puzzle_door_four")
+        logging.info("Resetting morsegame")
+        self.morse_entered = []
+        self.morse_completed = False
+      
+      if sprite.feet.colliderect(self.mors_button_one_range) and self.f_key_pressed == True:
+        self.f_key_pressed = False
+        self.morse_entered.append(1)
+        logging.info("morse Notes Entered: %s" % self.morse_entered)
+        if self.morse_required == self.morse_entered:
+          self.morse_completed = True
+          hide_layer("puzzle_door_four")
+          logging.info("Morse Completed, Opening Door")	
+      if sprite.feet.colliderect(self.mors_button_two_range) and self.f_key_pressed == True:
+        self.f_key_pressed = False
+        self.morse_entered.append(2)
+        logging.info("morse Notes Entered: %s" % self.morse_entered)
+        if self.morse_required == self.morse_entered:
+          self.morse_completed = True
+          hide_layer("puzzle_door_four")
+          logging.info("Morse Completed, Opening Door")
+      if sprite.feet.colliderect(self.mors_button_three_range) and self.f_key_pressed == True:
+        self.f_key_pressed = False
+        self.morse_entered.append(3)
+        logging.info("morse Notes Entered: %s" % self.morse_entered)
+        if self.morse_required == self.morse_entered:
+          self.morse_completed = True
+          hide_layer("puzzle_door_four")
+          logging.info("Morse Completed, Opening Door")
+      if sprite.feet.colliderect(self.mors_button_four_range) and self.f_key_pressed == True:
+        self.f_key_pressed = False
+        self.morse_entered.append(4)
+        logging.info("morse Notes Entered: %s" % self.morse_entered)
+        if self.morse_required == self.morse_entered:
+          self.morse_completed = True
+          hide_layer("puzzle_door_four")
+          logging.info("Morse Completed, Opening Door")
+      if sprite.feet.colliderect(self.mors_button_five_range) and self.f_key_pressed == True:
+        self.f_key_pressed = False
+        self.morse_entered.append(5)
+        logging.info("Morse Notes Entered: %s" % self.morse_entered)
+        if self.morse_required == self.morse_entered:
+          self.morse_completed = True
+          hide_layer("puzzle_door_four")
+          logging.info("Morse Completed, Opening Door")
+      if sprite.feet.colliderect(self.mors_button_six_range) and self.f_key_pressed == True:
+        self.f_key_pressed = False
+        self.morse_entered.append(6)
+        logging.info("Morse Notes Entered: %s" % self.morse_entered)
+        if self.morse_required == self.morse_entered:
+          self.morse_completed = True
+          hide_layer("puzzle_door_four")
+          logging.info("Morse Completed, Opening Door")
