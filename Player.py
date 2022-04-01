@@ -7,8 +7,9 @@ from enums import Skills
 class Player(pygame.sprite.Sprite):
   """ Our Player, It goes brrrrr """
 
-  def __init__(self) -> None:
+  def __init__(self, game) -> None:
     super().__init__()
+    self.game = game
     self.image = load_image("player.png").convert_alpha()
     self.velocity = [0, 0]
     self._position = [0.0, 0.0]
