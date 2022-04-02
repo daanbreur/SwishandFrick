@@ -36,7 +36,7 @@ def get_layer_visibility(tmx_data: pytmx.TiledMap, layerName: str) -> bool:
 
 def add_skill(player, skill) -> None:
   if not check_skill(player, skill):
-    player.game.toastManager.addToast(f"You now have {skill}!")
+    player.game.toastManager.addToast(f"You now have {skill.name}!")
     logging.info(f"add_skill {skill} to {player.skills}")
     player.skills.append(skill)
   return
@@ -46,14 +46,14 @@ def check_skill(player, skill) -> bool:
 
 def add_gem(player, gem) -> None:
   if not check_gem(player, gem):
-    player.game.toastManager.addToast(f"You found a {gem}!")
+    player.game.toastManager.addToast(f"You found a {gem.name} Gem!")
     logging.info(f"add_gem {gem} to {player.inventory}")
     player.inventory.append(gem)
   return
   
 def remove_gem(player, gem) -> None:
   if not check_gem(player, gem):
-    player.game.toastManager.addToast(f"You lost a {gem}!")
+    player.game.toastManager.addToast(f"You lost a {gem.name} Gem!")
     logging.info(f"remove_gem {gem} from {player.inventory}")
     player.inventory.remove(gem)
   return

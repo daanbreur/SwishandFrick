@@ -55,6 +55,7 @@ class SimonSays():
             self.showColorIndex = 0
             self.showColor = True
           else:
+            self.game.toastManager.addToast("Simon Says Solved", 17)
             self.solved = True
             self.active = False
         else:
@@ -71,6 +72,7 @@ class SimonSays():
 
   def reset(self) -> None:
     if not self.solved:
+      self.game.toastManager.addToast("Simon Says Reset", 17)
       self.showColor = True
       self.sequence = [random.choice(list(SimonSaysButtons))]
       self.enteredSequence = []
