@@ -29,12 +29,13 @@ class MorseCode():
   def update(self, df: float) -> None:
     if self.active:
       if len(self.enteredSequence) >= len(self.sequence):
-        if self.sequence == self.enteredSequence and not self.solved:
-          logging.info("Morse Code Solved")
-          self.solved = True
-          self.game.toastManager.addToast("Morse Code Solved", 17)
-          set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "puzzle_door", False)
-          set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "puzzle_door_four", False)
+        if self.sequence == self.enteredSequence:
+          if not self.solved:
+            logging.info("Morse Code Solved")
+            self.solved = True
+            self.game.toastManager.addToast("Morse Code Solved", 17)
+            set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "puzzle_door", False)
+            set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "puzzle_door_four", False)
         else:
           self.reset()
 
