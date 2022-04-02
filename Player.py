@@ -16,7 +16,7 @@ class Player(pygame.sprite.Sprite):
     self._old_position = self._position
     self.rect = self.image.get_rect()
     self.feet = pygame.Rect(0, 0, self.rect.width * 0.5, 8)
-    self.skills = [Skills.RUN]
+    self.skills = []
     self.inventory = []
 
   @property
