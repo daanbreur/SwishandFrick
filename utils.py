@@ -19,10 +19,10 @@ def initialize_screen(width: int, height: int) -> pygame.Surface:
   return screen
 
 def load_image(filename: str) -> pygame.Surface:
-  return pygame.image.load(str(RESOURCES_DIR / filename))
+  return pygame.image.load(resource_path(RESOURCES_DIR / filename))
 
 def getFontAtSize(fontName="Level Up Level Up.otf", fontSize=16) -> pygame.font.Font:
-  return pygame.font.Font(RESOURCES_DIR / "fonts" / fontName, fontSize)
+  return pygame.font.Font(resource_path(RESOURCES_DIR / "fonts" / fontName), fontSize)
 
 def set_layer_visibilty(tmx_data: pytmx.TiledMap, map_layer: pyscroll.BufferedRenderer, layerName: str, visible: bool) -> None:
   tmx_data.get_layer_by_name(layerName).visible = visible
