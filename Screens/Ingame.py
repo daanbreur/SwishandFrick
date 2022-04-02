@@ -128,15 +128,6 @@ class Ingame:
     self.math_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("math_door_collider")[0])
     self.beach_button_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("beach_button_range")[0])
 
-    self.mors_button_red_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("mors_button_red_range")[0])
-    self.mors_button_blue_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("mors_button_blue_range")[0])
-    self.mors_button_one_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("mors_button_one_range")[0])
-    self.mors_button_two_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("mors_button_two_range")[0])
-    self.mors_button_three_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("mors_button_three_range")[0])
-    self.mors_button_four_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("mors_button_four_range")[0])
-    self.mors_button_five_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("mors_button_five_range")[0])
-    self.mors_button_six_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("mors_button_six_range")[0])
-
     self.final_gem_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("final_gem_door_collider")[0])
     self.final_gem_button_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("final_gem_button_range")[0])
 
@@ -160,10 +151,6 @@ class Ingame:
     self.math_entered = []
     self.math_completed = False
 
-    self.morse_required = [4,3,6,5,1,2]
-    self.morse_entered = []
-    self.morse_completed = False
-    
   def draw(self, screen) -> None:
     self.game.group.center(self.game.player.rect.center)
     self.game.group.draw(screen)
@@ -409,10 +396,9 @@ class Ingame:
         hide_layer("puzzle_door")
         self.door_one_time = pygame.time.get_ticks() + 12000
       if sprite.feet.colliderect(self.math_door_collider):
-        if self.morse_completed:
-          pass
+        if self.game.puzzles['morsecode'].solved: pass
         elif pygame.time.get_ticks() > self.door_one_time: sprite.move_back(dt)
-      if pygame.time.get_ticks() > self.door_one_time and not self.morse_completed: show_layer("puzzle_door")
+      if pygame.time.get_ticks() > self.door_one_time and not self.game.puzzles['morsecode'].solved: show_layer("puzzle_door")
 
       if sprite.feet.colliderect(self.mors_door_collider) and not self.math_entered: sprite.move_back(dt)
 
@@ -457,73 +443,3 @@ class Ingame:
           logging.info("Math Completed, Opening Door")	
       if self.math_required == self.math_entered: self.math_completed = True
       else: self.math_completed = False
-
-      if sprite.feet.colliderect(self.mors_button_blue_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        logging.info("Playing music for morsegame")
-        pygame.mixer.music.load(resource_path( RESOURCES_DIR / "sounds/morselevel.wav" ))
-        pygame.mixer.music.play()
-
-      if sprite.feet.colliderect(self.mors_button_red_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        show_layer("puzzle_door")
-        show_layer("puzzle_door_four")
-        logging.info("Resetting morsegame")
-        self.morse_entered = []
-        self.morse_completed = False
-      
-      if sprite.feet.colliderect(self.mors_button_one_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        self.morse_entered.append(1)
-        logging.info("morse Notes Entered: %s" % self.morse_entered)
-        if self.morse_required == self.morse_entered:
-          self.morse_completed = True
-          hide_layer("puzzle_door_four")
-          hide_layer("puzzle_door")
-          logging.info("Morse Completed, Opening Door")	
-      if sprite.feet.colliderect(self.mors_button_two_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        self.morse_entered.append(2)
-        logging.info("morse Notes Entered: %s" % self.morse_entered)
-        if self.morse_required == self.morse_entered:
-          self.morse_completed = True
-          hide_layer("puzzle_door_four")
-          hide_layer("puzzle_door")
-          logging.info("Morse Completed, Opening Door")
-      if sprite.feet.colliderect(self.mors_button_three_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        self.morse_entered.append(3)
-        logging.info("morse Notes Entered: %s" % self.morse_entered)
-        if self.morse_required == self.morse_entered:
-          self.morse_completed = True
-          hide_layer("puzzle_door_four")
-          hide_layer("puzzle_door")
-          logging.info("Morse Completed, Opening Door")
-      if sprite.feet.colliderect(self.mors_button_four_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        self.morse_entered.append(4)
-        logging.info("morse Notes Entered: %s" % self.morse_entered)
-        if self.morse_required == self.morse_entered:
-          self.morse_completed = True
-          hide_layer("puzzle_door_four")
-          hide_layer("puzzle_door")
-          logging.info("Morse Completed, Opening Door")
-      if sprite.feet.colliderect(self.mors_button_five_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        self.morse_entered.append(5)
-        logging.info("Morse Notes Entered: %s" % self.morse_entered)
-        if self.morse_required == self.morse_entered:
-          self.morse_completed = True
-          hide_layer("puzzle_door_four")
-          hide_layer("puzzle_door")
-          logging.info("Morse Completed, Opening Door")
-      if sprite.feet.colliderect(self.mors_button_six_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        self.morse_entered.append(6)
-        logging.info("Morse Notes Entered: %s" % self.morse_entered)
-        if self.morse_required == self.morse_entered:
-          self.morse_completed = True
-          hide_layer("puzzle_door_four")
-          hide_layer("puzzle_door")
-          logging.info("Morse Completed, Opening Door")
-      

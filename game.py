@@ -3,8 +3,6 @@ from distutils.spawn import spawn
 
 import sys
 import os
-
-from ToastManager import ToastManager
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
 from pathlib import Path
@@ -33,6 +31,9 @@ from Screens.Ingame import Ingame
 from Screens.SettingsMenu import SettingsMenu
 
 from Puzzles.SimonSays import SimonSays
+from Puzzles.MorseCode import MorseCode
+
+from ToastManager import ToastManager
 
 from Player import Player
 from utils import *
@@ -68,6 +69,7 @@ class Game:
 
     self.puzzles = {
       'simonsays': SimonSays(self),
+      'morsecode': MorseCode(self),
     }
 
     self.menus = {
