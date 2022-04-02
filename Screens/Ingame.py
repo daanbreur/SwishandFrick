@@ -111,12 +111,6 @@ class Ingame:
     self.music_button_four_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("music_button_four_range")[0])
     self.music_button_red_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("music_button_red_range")[0])
 
-    self.math_button_red_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("math_button_red_range")[0])
-    self.math_button_one_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("math_button_one_range")[0])
-    self.math_button_two_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("math_button_two_range")[0])
-    self.math_button_three_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("math_button_three_range")[0])
-    self.math_button_four_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("math_button_four_range")[0])
-
     self.lever_lever_one_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("lever_lever_one_range")[0])
     self.lever_lever_two_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("lever_lever_two_range")[0])
     self.lever_lever_three_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("lever_lever_three_range")[0])
@@ -144,12 +138,7 @@ class Ingame:
     
     self.music_required = [1,2,3,2,1,2,3,2,1,3,4,4,4,4,4,3]
     self.music_entered = []
-    self.music_index = 0
     self.music_completed = False
-
-    self.math_required = [3, 4, 1, 2]
-    self.math_entered = []
-    self.math_completed = False
 
   def draw(self, screen) -> None:
     self.game.group.center(self.game.player.rect.center)
@@ -158,7 +147,7 @@ class Ingame:
     if self.konami_text_show: screen.blit(sign_one, (screen.get_width()/2, screen.get_height()/2 - sign_one.get_height()/2 - 50))
     sign_two = self.font.render("RRLLLR", False, (255, 255, 255))
     if self.simon_text_show: screen.blit(sign_two, (screen.get_width()/2, screen.get_height()/2 - sign_two.get_height()/2 - 50))
-    sign_three = self.font.render("(((wortel van 6.512.704) + 7)/3)*4", False, (255, 255, 255))
+    sign_three = self.font.render("(((squareroot of 6512704) + 7)/3)*4", False, (255, 255, 255))
     if self.math_text_show: screen.blit(sign_three, (screen.get_width()/2, screen.get_height()/2 - sign_three.get_height()/2 - 50))
 
 
@@ -244,7 +233,7 @@ class Ingame:
         add_skill(sprite, Skills.HAMMER)
       
       if sprite.feet.colliderect(self.music_door_collider) and not self.music_door_opened: sprite.move_back(dt)
-      if sprite.feet.colliderect(self.final_gem_door_collider) and not self.morse_completed: sprite.move_back(dt)
+      if sprite.feet.colliderect(self.final_gem_door_collider) and not self.game.puzzles['morsecode'].solved: sprite.move_back(dt)
 
       if sprite.feet.colliderect(self.konami_sign): self.konami_text_show = True 
       else: self.konami_text_show = False
@@ -395,51 +384,10 @@ class Ingame:
       if sprite.feet.colliderect(self.beach_button_range) and self.f_key_pressed == True:
         hide_layer("puzzle_door")
         self.door_one_time = pygame.time.get_ticks() + 12000
+
       if sprite.feet.colliderect(self.math_door_collider):
         if self.game.puzzles['morsecode'].solved: pass
         elif pygame.time.get_ticks() > self.door_one_time: sprite.move_back(dt)
       if pygame.time.get_ticks() > self.door_one_time and not self.game.puzzles['morsecode'].solved: show_layer("puzzle_door")
 
-      if sprite.feet.colliderect(self.mors_door_collider) and not self.math_entered: sprite.move_back(dt)
-
-      if sprite.feet.colliderect(self.math_button_red_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        show_layer("puzzle_door_three")
-        logging.info("Resetting mathgame")
-        self.math_entered = []
-        self.math_completed = False
-      
-      if sprite.feet.colliderect(self.math_button_one_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        self.math_entered.append(1)
-        logging.info("Math Entered: %s" % self.math_entered)
-        if self.math_required == self.math_entered:
-          self.math_completed = True
-          hide_layer("puzzle_door_three")
-          logging.info("Math Completed, Opening Door")	
-      if sprite.feet.colliderect(self.math_button_two_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        self.math_entered.append(2)
-        logging.info("Math Entered: %s" % self.math_entered)
-        if self.math_required == self.math_entered:
-          self.math_completed = True
-          hide_layer("puzzle_door_three")
-          logging.info("Math Completed, Opening Door")	
-      if sprite.feet.colliderect(self.math_button_three_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        self.math_entered.append(3)
-        logging.info("Math Entered: %s" % self.math_entered)
-        if self.math_required == self.math_entered:
-          self.math_completed = True
-          hide_layer("puzzle_door_three")
-          logging.info("Math Completed, Opening Door")
-      if sprite.feet.colliderect(self.math_button_four_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        self.math_entered.append(4)
-        logging.info("Math Entered: %s" % self.math_entered)
-        if self.math_required == self.math_entered:
-          self.math_completed = True
-          hide_layer("puzzle_door_three")
-          logging.info("Math Completed, Opening Door")	
-      if self.math_required == self.math_entered: self.math_completed = True
-      else: self.math_completed = False
+      if sprite.feet.colliderect(self.mors_door_collider) and not self.game.puzzles['math'].solved: sprite.move_back(dt)
