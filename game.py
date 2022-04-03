@@ -35,6 +35,7 @@ from Puzzles.MorseCode import MorseCode
 from Puzzles.Math import Math
 from Puzzles.Music import Music
 from Puzzles.LeverCombination import LeverCombination
+from Puzzles.KonamiCode import KonamiCode
 
 from ToastManager import ToastManager
 
@@ -76,6 +77,7 @@ class Game:
       'math': Math(self),
       'music': Music(self),
       'levercombination': LeverCombination(self),
+      'konami': KonamiCode(self),
     }
 
     self.menus = {

@@ -112,11 +112,6 @@ class Ingame:
 
     self.gear_wall_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("gear_wall_range")[0])
 
-    self.konami_code = [pygame.K_UP, pygame.K_UP, pygame.K_DOWN, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_LEFT, pygame.K_RIGHT, pygame.K_b, pygame.K_a]
-    self.komani_code_entered = []
-    self.konami_code_index = 0
-    self.komani_code_completed = False
-
     self.konami_text_show = False
     self.simon_text_show = False
     self.math_text_show = False
@@ -135,19 +130,6 @@ class Ingame:
     if event.type == pygame.KEYDOWN:
       if event.key == pygame.K_f:
         self.f_key_pressed = True
-      elif not self.komani_code_completed:
-        if event.key == self.konami_code[self.konami_code_index]:
-          self.komani_code_entered.append(event.key)
-          self.konami_code_index += 1
-
-          logging.info(f"Konami code index: {self.konami_code_index} / {len(self.konami_code)} | {self.konami_code[self.konami_code_index-1]}")
-          if self.konami_code == self.komani_code_entered:
-            logging.info("Konami code entered correctly")
-            self.komani_code_completed = True
-            if not check_skill(self.game.player, Skills.SWIM):
-              logging.info("Komani code entered correctly, adding swim skill")
-              add_skill(self.game.player, Skills.SWIM)
-
     elif event.type == pygame.KEYUP:
       if event.key == pygame.K_f:
         self.f_key_pressed = False
