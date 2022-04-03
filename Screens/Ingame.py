@@ -1,4 +1,3 @@
-from re import S
 import pygame
 from enums import Skills, Gems
 from utils import add_skill, check_skill, get_layer_visibility, getFontAtSize, resource_path, set_layer_visibilty, check_gem, add_gem, tile_object_to_rect
@@ -18,13 +17,6 @@ class Ingame:
     self.door_one_time = 0
     self.door_lever_water_enabled = False
     self.door_lever_one_enabled = False
-
-    self.lever_lever_one_enabled = False
-    self.lever_lever_two_enabled = False
-    self.lever_lever_three_enabled = False
-    self.lever_lever_four_enabled = False
-    self.lever_lever_five_enabled = False
-    self.lever_lever_six_enabled = False
     
     self.gem_door_opened = False
     self.music_door_opened = False
