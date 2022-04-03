@@ -33,6 +33,7 @@ from Screens.SettingsMenu import SettingsMenu
 from Puzzles.SimonSays import SimonSays
 from Puzzles.MorseCode import MorseCode
 from Puzzles.Math import Math
+from Puzzles.Music import Music
 
 from ToastManager import ToastManager
 
@@ -72,6 +73,7 @@ class Game:
       'simonsays': SimonSays(self),
       'morsecode': MorseCode(self),
       'math': Math(self),
+      'music': Music(self),
     }
 
     self.menus = {
