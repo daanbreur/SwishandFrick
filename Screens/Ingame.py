@@ -104,13 +104,6 @@ class Ingame:
 
     self.hamer_lever_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("hamer_lever_range")[0])
 
-    self.music_button_green_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("music_button_green_range")[0])
-    self.music_button_one_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("music_button_one_range")[0])
-    self.music_button_two_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("music_button_two_range")[0])
-    self.music_button_three_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("music_button_three_range")[0])
-    self.music_button_four_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("music_button_four_range")[0])
-    self.music_button_red_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("music_button_red_range")[0])
-
     self.lever_lever_one_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("lever_lever_one_range")[0])
     self.lever_lever_two_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("lever_lever_two_range")[0])
     self.lever_lever_three_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("lever_lever_three_range")[0])
@@ -135,10 +128,6 @@ class Ingame:
     self.konami_text_show = False
     self.simon_text_show = False
     self.math_text_show = False
-    
-    self.music_required = [1,2,3,2,1,2,3,2,1,3,4,4,4,4,4,3]
-    self.music_entered = []
-    self.music_completed = False
 
   def draw(self, screen) -> None:
     self.game.group.center(self.game.player.rect.center)
@@ -149,8 +138,6 @@ class Ingame:
     if self.simon_text_show: screen.blit(sign_two, (screen.get_width()/2, screen.get_height()/2 - sign_two.get_height()/2 - 50))
     sign_three = self.font.render("(((squareroot of 6512704) + 7)/3)*4", False, (255, 255, 255))
     if self.math_text_show: screen.blit(sign_three, (screen.get_width()/2, screen.get_height()/2 - sign_three.get_height()/2 - 50))
-
-
 
   def handle_input(self, event) -> None:
     if event.type == pygame.KEYDOWN:
@@ -320,67 +307,7 @@ class Ingame:
         set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "lever_hamer", not get_layer_visibility(self.game.tmx_data, "lever_hamer"))
         set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "lever_door_three", not get_layer_visibility(self.game.tmx_data, "lever_door_three"))
 
-
-      if sprite.feet.colliderect(self.music_button_green_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        logging.info("Playing music for musicgame")
-        pygame.mixer.music.load(resource_path( RESOURCES_DIR / "sounds/songlevel.wav" ))
-        pygame.mixer.music.play()
-
-      if sprite.feet.colliderect(self.music_button_red_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        show_layer("puzzle_door_two")
-        logging.info("Resetting musicgame")
-        self.music_entered = []
-        self.music_completed = False
-      
-      if sprite.feet.colliderect(self.music_button_one_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        self.music_entered.append(1)
-        logging.info("Music Notes Entered: %s" % self.music_entered)
-        if self.music_required == self.music_entered:
-          self.music_completed = True
-          hide_layer("puzzle_door_two")
-          logging.info("Music Completed, Opening Door")	
-        pygame.mixer.music.load(resource_path( RESOURCES_DIR / "sounds/notes1.wav" ))
-        pygame.mixer.music.play()
-      if sprite.feet.colliderect(self.music_button_two_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        self.music_entered.append(2)
-        logging.info("Music Notes Entered: %s" % self.music_entered)
-        if self.music_required == self.music_entered:
-          self.music_completed = True
-          hide_layer("puzzle_door_two")
-          logging.info("Music Completed, Opening Door")	
-        pygame.mixer.music.load(resource_path( RESOURCES_DIR / "sounds/notes2.wav" ))
-        pygame.mixer.music.play()
-      if sprite.feet.colliderect(self.music_button_three_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        self.music_entered.append(3)
-        logging.info("Music Notes Entered: %s" % self.music_entered)
-        if self.music_required == self.music_entered:
-          self.music_completed = True
-          hide_layer("puzzle_door_two")
-          logging.info("Music Completed, Opening Door")	
-        pygame.mixer.music.load(resource_path( RESOURCES_DIR / "sounds/notes3.wav" ))
-        pygame.mixer.music.play()
-      if sprite.feet.colliderect(self.music_button_four_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        self.music_entered.append(4)
-        logging.info("Music Notes Entered: %s" % self.music_entered)
-        if self.music_required == self.music_entered:
-          self.music_completed = True
-          hide_layer("puzzle_door_two")
-          logging.info("Music Completed, Opening Door")	
-        pygame.mixer.music.load(resource_path( RESOURCES_DIR / "sounds/notes4.wav" ))
-        pygame.mixer.music.play() 
-      if self.music_required == self.music_entered:
-          self.music_completed = True
-      else: 
-        self.music_completed = False
-        show_layer("puzzle_door_two")
-
-      if sprite.feet.colliderect(self.beach_door_collider) and not self.music_completed: sprite.move_back(dt)
+      if sprite.feet.colliderect(self.beach_door_collider) and not self.game.puzzles['music'].solved: sprite.move_back(dt)
       if sprite.feet.colliderect(self.beach_button_range) and self.f_key_pressed == True:
         hide_layer("puzzle_door")
         self.door_one_time = pygame.time.get_ticks() + 12000

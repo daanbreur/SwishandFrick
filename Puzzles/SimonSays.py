@@ -33,8 +33,6 @@ class SimonSays():
     self.yellow_button_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("simon_yellow_range")[0])
     self.reset_button_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("simon_reset_range")[0])
 
-    return
-
   def draw(self, screen: pygame.Surface) -> None:
     if self.showColor:
       if not self.showColorIndex > len(self.sequence)-1:
@@ -60,7 +58,6 @@ class SimonSays():
             self.active = False
         else:
           self.reset()
-    pass
 
   def nextColor(self) -> None:
     if self.active:
