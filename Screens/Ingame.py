@@ -97,19 +97,11 @@ class Ingame:
     self.puzzle_door_one = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("levers_door_collider")[0])
     self.simon_sign_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("simon_sign_range")[0])
     self.beach_sign_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("beach_sign_range")[0])
-    self.lever_complete_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("lever_complete_range")[0])
     self.music_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("music_door_collider")[0])
     self.gem_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("gem_door_collider")[0])
     self.beach_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("beach_door_collider")[0])
 
     self.hamer_lever_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("hamer_lever_range")[0])
-
-    self.lever_lever_one_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("lever_lever_one_range")[0])
-    self.lever_lever_two_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("lever_lever_two_range")[0])
-    self.lever_lever_three_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("lever_lever_three_range")[0])
-    self.lever_lever_four_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("lever_lever_four_range")[0])
-    self.lever_lever_five_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("lever_lever_five_range")[0])
-    self.lever_lever_six_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("lever_lever_six_range")[0])
 
     self.mors_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("mors_door_collider")[0])
     self.math_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("math_door_collider")[0])
@@ -215,9 +207,6 @@ class Ingame:
         self.water_wall_opened = True
         hide_layer("water_empty")
       if sprite.feet.collidelist(self.shallow_water_finish) > -1 and not self.water_wall_opened: sprite.move_back(dt)
-
-      if sprite.feet.colliderect(self.lever_complete_range) and self.lever_lever_one_enabled and self.lever_lever_two_enabled and not self.lever_lever_three_enabled and not self.lever_lever_four_enabled and not self.lever_lever_five_enabled and self.lever_lever_six_enabled:
-        add_skill(sprite, Skills.HAMMER)
       
       if sprite.feet.colliderect(self.music_door_collider) and not self.music_door_opened: sprite.move_back(dt)
       if sprite.feet.colliderect(self.final_gem_door_collider) and not self.game.puzzles['morsecode'].solved: sprite.move_back(dt)
@@ -263,42 +252,6 @@ class Ingame:
       
       if sprite.feet.colliderect(self.puzzle_door_one) and not self.game.puzzles['simonsays'].solved: sprite.move_back(dt)
       if self.game.puzzles['simonsays'].solved: hide_layer("puzzle_door_one")
-
-      if sprite.feet.colliderect(self.lever_lever_one_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        self.lever_lever_one_enabled = not self.lever_lever_one_enabled
-        logging.info("Levers Enabled: %s %s %s %s %s %s" % (self.lever_lever_one_enabled, self.lever_lever_two_enabled, self.lever_lever_three_enabled, self.lever_lever_four_enabled, self.lever_lever_five_enabled, self.lever_lever_six_enabled))
-        set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "lever_puzzle_one", not get_layer_visibility(self.game.tmx_data, "lever_puzzle_one"))
-
-      if sprite.feet.colliderect(self.lever_lever_two_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        self.lever_lever_two_enabled = not self.lever_lever_two_enabled
-        logging.info("Levers Enabled: %s %s %s %s %s %s" % (self.lever_lever_one_enabled, self.lever_lever_two_enabled, self.lever_lever_three_enabled, self.lever_lever_four_enabled, self.lever_lever_five_enabled, self.lever_lever_six_enabled))
-        set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "lever_puzzle_two", not get_layer_visibility(self.game.tmx_data, "lever_puzzle_two"))
-
-      if sprite.feet.colliderect(self.lever_lever_three_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        self.lever_lever_three_enabled = not self.lever_lever_three_enabled
-        logging.info("Levers Enabled: %s %s %s %s %s %s" % (self.lever_lever_one_enabled, self.lever_lever_two_enabled, self.lever_lever_three_enabled, self.lever_lever_four_enabled, self.lever_lever_five_enabled, self.lever_lever_six_enabled))
-        set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "lever_puzzle_three", not get_layer_visibility(self.game.tmx_data, "lever_puzzle_three"))
-
-      if sprite.feet.colliderect(self.lever_lever_four_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        self.lever_lever_four_enabled = not self.lever_lever_four_enabled
-        logging.info("Levers Enabled: %s %s %s %s %s %s" % (self.lever_lever_one_enabled, self.lever_lever_two_enabled, self.lever_lever_three_enabled, self.lever_lever_four_enabled, self.lever_lever_five_enabled, self.lever_lever_six_enabled))
-        set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "lever_puzzle_four", not get_layer_visibility(self.game.tmx_data, "lever_puzzle_four"))
-
-      if sprite.feet.colliderect(self.lever_lever_five_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        self.lever_lever_five_enabled = not self.lever_lever_five_enabled
-        logging.info("Levers Enabled: %s %s %s %s %s %s" % (self.lever_lever_one_enabled, self.lever_lever_two_enabled, self.lever_lever_three_enabled, self.lever_lever_four_enabled, self.lever_lever_five_enabled, self.lever_lever_six_enabled))
-        set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "lever_puzzle_five", not get_layer_visibility(self.game.tmx_data, "lever_puzzle_five"))
-
-      if sprite.feet.colliderect(self.lever_lever_six_range) and self.f_key_pressed == True:
-        self.f_key_pressed = False
-        self.lever_lever_six_enabled = not self.lever_lever_six_enabled
-        logging.info("Levers Enabled: %s %s %s %s %s %s" % (self.lever_lever_one_enabled, self.lever_lever_two_enabled, self.lever_lever_three_enabled, self.lever_lever_four_enabled, self.lever_lever_five_enabled, self.lever_lever_six_enabled))
-        set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "lever_puzzle_six", not get_layer_visibility(self.game.tmx_data, "lever_puzzle_six"))
 
       if sprite.feet.colliderect(self.hamer_lever_range) and self.f_key_pressed == True:
         self.f_key_pressed = False

@@ -34,6 +34,7 @@ from Puzzles.SimonSays import SimonSays
 from Puzzles.MorseCode import MorseCode
 from Puzzles.Math import Math
 from Puzzles.Music import Music
+from Puzzles.LeverCombination import LeverCombination
 
 from ToastManager import ToastManager
 
@@ -74,6 +75,7 @@ class Game:
       'morsecode': MorseCode(self),
       'math': Math(self),
       'music': Music(self),
+      'levercombination': LeverCombination(self),
     }
 
     self.menus = {
