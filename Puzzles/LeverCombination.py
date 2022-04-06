@@ -37,12 +37,10 @@ class LeverCombination():
 
   def reset(self) -> None:
     logging.info("Resetting LeverCombination")
-    self.game.toastManager.addToast("Lever Challange Reset", 17)
-    pygame.mixer.music.stop()
+    self.game.toastManager.addToast("Lever Combination Reset", 17)
     self.solved = False
     self.sequence = []
     self.enteredSequence = []
-    set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "puzzle_door_two", True)
 
   def handle_input(self, event) -> None:
     if event.key == pygame.K_f:
