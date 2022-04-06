@@ -90,7 +90,6 @@ class Ingame:
     self.simon_sign_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("simon_sign_range")[0])
     self.beach_sign_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("beach_sign_range")[0])
     self.music_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("music_door_collider")[0])
-    self.beach_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("beach_door_collider")[0])
 
     self.hamer_lever_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("hamer_lever_range")[0])
 
@@ -110,6 +109,7 @@ class Ingame:
 
     self.game.doorManager.newDoor("button_door_two", "simon_door_collider", "button_door_two")
     self.game.doorManager.newDoor("puzzle_door_one", "levers_door_collider", "puzzle_door_one")
+    self.game.doorManager.newDoor("beach_door", "beach_door_collider", "puzzle_door_two")
 
     self.konami_text_show = False
     self.simon_text_show = False
@@ -225,7 +225,6 @@ class Ingame:
         set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "lever_hamer", not get_layer_visibility(self.game.tmx_data, "lever_hamer"))
         set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "lever_door_three", not get_layer_visibility(self.game.tmx_data, "lever_door_three"))
 
-      if sprite.feet.colliderect(self.beach_door_collider) and not self.game.puzzles['music'].solved: sprite.move_back(dt)
       if sprite.feet.colliderect(self.beach_button_range) and self.f_key_pressed == True:
         hide_layer("puzzle_door")
         self.door_one_time = pygame.time.get_ticks() + 12000
