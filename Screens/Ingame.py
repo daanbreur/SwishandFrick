@@ -94,7 +94,6 @@ class Ingame:
     self.hamer_lever_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("hamer_lever_range")[0])
 
     self.mors_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("mors_door_collider")[0])
-    self.math_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("math_door_collider")[0])
     self.beach_button_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("beach_button_range")[0])
 
     self.final_gem_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("final_gem_door_collider")[0])
@@ -110,6 +109,7 @@ class Ingame:
     self.game.doorManager.newDoor("button_door_two", "simon_door_collider", "button_door_two")
     self.game.doorManager.newDoor("puzzle_door_one", "levers_door_collider", "puzzle_door_one")
     self.game.doorManager.newDoor("beach_door", "beach_door_collider", "puzzle_door_two")
+    self.game.doorManager.newDoor("math_door", "math_door_collider", "puzzle_door")
 
     self.konami_text_show = False
     self.simon_text_show = False
@@ -225,13 +225,6 @@ class Ingame:
         set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "lever_hamer", not get_layer_visibility(self.game.tmx_data, "lever_hamer"))
         set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "lever_door_three", not get_layer_visibility(self.game.tmx_data, "lever_door_three"))
 
-      if sprite.feet.colliderect(self.beach_button_range) and self.f_key_pressed == True:
-        hide_layer("puzzle_door")
-        self.door_one_time = pygame.time.get_ticks() + 12000
-
-      if sprite.feet.colliderect(self.math_door_collider):
-        if self.game.puzzles['morsecode'].solved: pass
-        elif pygame.time.get_ticks() > self.door_one_time: sprite.move_back(dt)
-      if pygame.time.get_ticks() > self.door_one_time and not self.game.puzzles['morsecode'].solved: show_layer("puzzle_door")
+      if sprite.feet.colliderect(self.beach_button_range) and self.f_key_pressed == True: self.game.doorManager.openDoorForMillisById("math_door", 12000)      
 
       if sprite.feet.colliderect(self.mors_door_collider) and not self.game.puzzles['math'].solved: sprite.move_back(dt)
