@@ -19,8 +19,6 @@ class Door():
     self.sprite_layer: str = sprite_layer
     self.collider: pygame.Rect = tile_object_to_rect(self.game.tmx_data.get_layer_by_name(self.collider_layer)[0])
 
-    logging.info(f"Created door with collider {self.collider_layer} and sprite {self.sprite_layer}")
-
   def open(self) -> None:
     self.opened = True
     set_layer_visibilty(self.game.tmx_data, self.game.map_layer, self.sprite_layer, False)
