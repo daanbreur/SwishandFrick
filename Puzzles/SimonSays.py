@@ -1,3 +1,9 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+  from game import Game
+
 import pygame
 import enum
 import logging
@@ -14,10 +20,10 @@ class SimonSaysButtons(enum.Enum):
   BLUE = 'blue'
 
 class SimonSays():
-  def __init__(self, game) -> None:
+  def __init__(self, game: Game) -> None:
     self.active = False
     self.solved = False
-    self.game = game
+    self.game: Game = game
 
     self.sequence = [random.choice(list(SimonSaysButtons))]
     self.enteredSequence = []
@@ -54,6 +60,8 @@ class SimonSays():
             self.showColor = True
           else:
             self.game.toastManager.addToast("Simon Says Solved", 17)
+            self.game.doorManager.openDoorById("button_door_two")
+            self.game.doorManager.openDoorById("puzzle_door_one")
             self.solved = True
             self.active = False
         else:
@@ -70,6 +78,8 @@ class SimonSays():
   def reset(self) -> None:
     if not self.solved:
       self.game.toastManager.addToast("Simon Says Reset", 17)
+      self.game.doorManager.closeDoorById("button_door_two")
+      self.game.doorManager.closeDoorById("puzzle_door_one")
       self.showColor = True
       self.sequence = [random.choice(list(SimonSaysButtons))]
       self.enteredSequence = []

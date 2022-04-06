@@ -1,5 +1,4 @@
 from __future__ import annotations
-from distutils.spawn import spawn
 
 import sys
 import os
@@ -38,6 +37,7 @@ from Puzzles.LeverCombination import LeverCombination
 from Puzzles.KonamiCode import KonamiCode
 
 from ToastManager import ToastManager
+from DoorManager import DoorManager
 
 from Player import Player
 from utils import *
@@ -69,7 +69,8 @@ class Game:
     self.group = PyscrollGroup(map_layer=self.map_layer, default_layer=50)
     self.group.add(self.player)
 
-    self.toastManager = ToastManager(self.screen)
+    self.toastManager: ToastManager = ToastManager(self.screen)
+    self.doorManager: DoorManager = DoorManager(self)
 
     self.puzzles = {
       'simonsays': SimonSays(self),

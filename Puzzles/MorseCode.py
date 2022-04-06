@@ -1,3 +1,9 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+  from game import Game
+
 import pygame
 import logging
 from constants import RESOURCES_DIR
@@ -5,10 +11,10 @@ from constants import RESOURCES_DIR
 from utils import resource_path, set_layer_visibilty, tile_object_to_rect
 
 class MorseCode():
-  def __init__(self, game) -> None:
+  def __init__(self, game: Game) -> None:
     self.active = True
     self.solved = False
-    self.game = game
+    self.game: Game = game
 
     self.sequence = [4,3,6,5,1,2]
     self.enteredSequence = []
@@ -34,20 +40,20 @@ class MorseCode():
             logging.info("Morse Code Solved")
             self.solved = True
             self.game.toastManager.addToast("Morse Code Solved", 17)
-            set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "puzzle_door", False)
-            set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "puzzle_door_four", False)
+            self.game.doorManager.openDoorById("math_door")
+            self.game.doorManager.openDoorById("final_gem_door")
         else:
           self.reset()
 
   def reset(self) -> None:
     logging.info("Resetting Morse Code")
+    self.game.doorManager.closeDoorById("final_gem_door")
+    self.game.doorManager.closeDoorById("math_door")
     self.game.toastManager.addToast("Morse Code Reset", 17)
     self.solved = False
     self.sequence = [4,3,6,5,1,2]
     self.enteredSequence = []
     pygame.mixer.music.stop()
-    set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "puzzle_door", True)
-    set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "puzzle_door_four", True)
 
   def handle_input(self, event) -> None:
     if event.key == pygame.K_f:

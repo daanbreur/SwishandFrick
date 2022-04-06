@@ -1,14 +1,18 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+  from game import Game
+
 import pygame
 from enums import Skills, Gems
 from utils import add_skill, check_skill, get_layer_visibility, getFontAtSize, resource_path, set_layer_visibilty, check_gem, add_gem, tile_object_to_rect
 from constants import PAUSE_BLINK_TIME_MS, RESOURCES_DIR
 
-from MenuButton import MenuButton
-
 import logging
 f_key = False
 class Ingame:
-  def __init__(self, game) -> None:
+  def __init__(self, game: Game) -> None:
     self.game = game
     self.font = getFontAtSize(fontSize=20)
     
@@ -18,7 +22,6 @@ class Ingame:
     self.door_lever_water_enabled = False
     self.door_lever_one_enabled = False
     
-    self.gem_door_opened = False
     self.music_door_opened = False
     self.gear_wall_opened = False
     self.water_wall_opened = False 
@@ -75,34 +78,38 @@ class Ingame:
     self.boots_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("boots_collider")[0])
     self.red_key_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("red_key_collider")[0])
     self.red_key_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("red_key_range")[0])
-    self.red_key_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("red_key_door_collider")[0])
     self.gem_door_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("gem_door_range")[0])
     self.konami_sign = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("konami_sign")[0])
-    self.button_door_one_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("button_door_one_collider")[0])
-    self.button__one_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("button__one_range")[0])
+    self.button_door_one_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("button_door_one_range")[0])
     self.lever_water_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("lever_water_range")[0])
     self.house_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("house_door_collider")[0])
     self.lever_spawn_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("lever_spawn_range")[0])
     self.lever_door_one_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("lever_door_one_collider")[0])
     self.button_house_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("button_house_range")[0])
     self.simon_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("simon_door_collider")[0])
-    self.puzzle_door_one = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("levers_door_collider")[0])
     self.simon_sign_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("simon_sign_range")[0])
     self.beach_sign_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("beach_sign_range")[0])
     self.music_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("music_door_collider")[0])
-    self.gem_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("gem_door_collider")[0])
-    self.beach_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("beach_door_collider")[0])
 
     self.hamer_lever_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("hamer_lever_range")[0])
 
-    self.mors_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("mors_door_collider")[0])
-    self.math_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("math_door_collider")[0])
     self.beach_button_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("beach_button_range")[0])
 
-    self.final_gem_door_collider = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("final_gem_door_collider")[0])
     self.final_gem_button_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("final_gem_button_range")[0])
 
     self.gear_wall_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("gear_wall_range")[0])
+
+    self.game.doorManager.newDoor("red_key_door", "red_key_door_collider", "red_key_door")
+    self.game.doorManager.newDoor("button_door_one", "button_door_one_collider", "button_door_one")
+
+    self.game.doorManager.newDoor("gem_door_one", "gem_door_collider", "gem_door_one")
+
+    self.game.doorManager.newDoor("button_door_two", "simon_door_collider", "button_door_two")
+    self.game.doorManager.newDoor("puzzle_door_one", "levers_door_collider", "puzzle_door_one")
+    self.game.doorManager.newDoor("beach_door", "beach_door_collider", "puzzle_door_two")
+    self.game.doorManager.newDoor("math_door", "math_door_collider", "puzzle_door")
+    self.game.doorManager.newDoor("morse_door", "mors_door_collider", "puzzle_door_three")
+    self.game.doorManager.newDoor("final_gem_door", "final_gem_door_collider", "puzzle_door_four")
 
     self.konami_text_show = False
     self.simon_text_show = False
@@ -145,6 +152,8 @@ class Ingame:
 
     
     for sprite in self.game.group.sprites():
+      self.game.doorManager.update(sprite, dt)
+
       if sprite.feet.collidelist(self.walls) > -1: sprite.move_back(dt)
       if sprite.feet.collidelist(self.shallowwater) > -1 and not Skills.SWIM in sprite.skills: sprite.move_back(dt)
       
@@ -158,8 +167,8 @@ class Ingame:
       if sprite.feet.colliderect(self.gear_collider) and not check_gem(sprite, Gems.GEAR): add_and_hide_gem("gear", Gems.GEAR)
       if sprite.feet.colliderect(self.boots_collider) and not check_skill(sprite, Skills.RUN): add_and_hide_skill("boots", Skills.RUN)
       if sprite.feet.colliderect(self.red_key_collider) and not check_gem(sprite, Gems.KEY): add_and_hide_gem("red_key", Gems.KEY)
-      if sprite.feet.colliderect(self.red_key_door_collider) and not check_gem(sprite, Gems.KEY): sprite.move_back(dt)
-      if sprite.feet.colliderect(self.red_key_range) and check_gem(sprite, Gems.KEY): hide_layer("red_key_door")
+
+      if sprite.feet.colliderect(self.red_key_range) and check_gem(sprite, Gems.KEY): self.game.doorManager.openDoorById("red_key_door")
 
       if sprite.feet.collidelist(self.soft_wall_low_range) > -1 and check_skill(sprite, Skills.HAMMER): hide_layer("soft_wall_low")
       if sprite.feet.collidelist(self.soft_wall_low_collider) > -1 and not check_skill(sprite, Skills.HAMMER): sprite.move_back(dt)
@@ -171,10 +180,7 @@ class Ingame:
         hide_layer("gear_wall")
       if sprite.feet.collidelist(self.gear_wall_collider) > -1 and not self.gear_wall_opened: sprite.move_back(dt)
 
-      if sprite.feet.colliderect(self.gem_door_range) and check_gem(sprite, Gems.BLUE) and check_gem(sprite, Gems.RED) and check_gem(sprite, Gems.GREEN): 
-        self.gem_door_opened = True
-        hide_layer("gem_door_one")
-      if sprite.feet.colliderect(self.gem_door_collider) and not self.gem_door_opened: sprite.move_back(dt)
+      if sprite.feet.colliderect(self.gem_door_range) and check_gem(sprite, Gems.BLUE) and check_gem(sprite, Gems.RED) and check_gem(sprite, Gems.GREEN): self.game.doorManager.openDoorById("gem_door_one")
 
       if sprite.feet.colliderect(self.final_gem_button_range) and check_gem(sprite, Gems.ORANGE) and check_gem(sprite, Gems.LEMON) and check_gem(sprite, Gems.PURPLE) and check_gem(sprite, Gems.PINK) and self.f_key_pressed == True:
         self.f_key_pressed = False
@@ -183,7 +189,6 @@ class Ingame:
       if sprite.feet.collidelist(self.shallow_water_finish) > -1 and not self.water_wall_opened: sprite.move_back(dt)
       
       if sprite.feet.colliderect(self.music_door_collider) and not self.music_door_opened: sprite.move_back(dt)
-      if sprite.feet.colliderect(self.final_gem_door_collider) and not self.game.puzzles['morsecode'].solved: sprite.move_back(dt)
 
       if sprite.feet.colliderect(self.konami_sign): self.konami_text_show = True 
       else: self.konami_text_show = False
@@ -192,21 +197,9 @@ class Ingame:
       if sprite.feet.colliderect(self.beach_sign_range): self.math_text_show = True
       else: self.math_text_show = False
 
-      if sprite.feet.colliderect(self.button__one_range) and self.f_key_pressed == True:
-        hide_layer("button_door_one")
-        self.door_one_time = pygame.time.get_ticks() + 2000
-      if sprite.feet.colliderect(self.button_door_one_collider) and pygame.time.get_ticks() > self.door_one_time: sprite.move_back(dt)
-      if pygame.time.get_ticks() > self.door_one_time: show_layer("button_door_one")
+      if sprite.feet.colliderect(self.button_door_one_range) and self.f_key_pressed == True: self.game.doorManager.openDoorForMillisById("button_door_one", 2000)
 
-
-      if sprite.feet.colliderect(self.button_house_range) and self.f_key_pressed == True:
-        hide_layer("button_door_two")
-        self.door_one_time = pygame.time.get_ticks() + 4000
-      if sprite.feet.colliderect(self.simon_door_collider): 
-        if self.game.puzzles['simonsays'].solved: pass
-        elif pygame.time.get_ticks() > self.door_one_time: sprite.move_back(dt)
-      if self.game.puzzles['simonsays'].solved: hide_layer("button_door_two")
-      elif pygame.time.get_ticks() > self.door_one_time: show_layer("button_door_two")
+      if sprite.feet.colliderect(self.button_house_range) and self.f_key_pressed == True: self.game.doorManager.openDoorForMillisById("button_door_two", 4000)
 
 
       if sprite.feet.colliderect(self.house_door_collider) and not self.door_lever_water_enabled: sprite.move_back(dt)
@@ -224,9 +217,6 @@ class Ingame:
         set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "lever_spawn", not get_layer_visibility(self.game.tmx_data, "lever_spawn"))
         set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "lever_door_one", not get_layer_visibility(self.game.tmx_data, "lever_door_one"))
       
-      if sprite.feet.colliderect(self.puzzle_door_one) and not self.game.puzzles['simonsays'].solved: sprite.move_back(dt)
-      if self.game.puzzles['simonsays'].solved: hide_layer("puzzle_door_one")
-
       if sprite.feet.colliderect(self.hamer_lever_range) and self.f_key_pressed == True:
         self.f_key_pressed = False
         self.music_door_opened = not self.music_door_opened
@@ -234,14 +224,4 @@ class Ingame:
         set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "lever_hamer", not get_layer_visibility(self.game.tmx_data, "lever_hamer"))
         set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "lever_door_three", not get_layer_visibility(self.game.tmx_data, "lever_door_three"))
 
-      if sprite.feet.colliderect(self.beach_door_collider) and not self.game.puzzles['music'].solved: sprite.move_back(dt)
-      if sprite.feet.colliderect(self.beach_button_range) and self.f_key_pressed == True:
-        hide_layer("puzzle_door")
-        self.door_one_time = pygame.time.get_ticks() + 12000
-
-      if sprite.feet.colliderect(self.math_door_collider):
-        if self.game.puzzles['morsecode'].solved: pass
-        elif pygame.time.get_ticks() > self.door_one_time: sprite.move_back(dt)
-      if pygame.time.get_ticks() > self.door_one_time and not self.game.puzzles['morsecode'].solved: show_layer("puzzle_door")
-
-      if sprite.feet.colliderect(self.mors_door_collider) and not self.game.puzzles['math'].solved: sprite.move_back(dt)
+      if sprite.feet.colliderect(self.beach_button_range) and self.f_key_pressed == True: self.game.doorManager.openDoorForMillisById("math_door", 12000)      

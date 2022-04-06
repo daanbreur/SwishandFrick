@@ -1,13 +1,19 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+  from game import Game
+
 import pygame
 import logging
 from constants import RESOURCES_DIR
 from utils import resource_path, set_layer_visibilty, tile_object_to_rect
 
 class Music():
-  def __init__(self, game) -> None:
+  def __init__(self, game: Game) -> None:
     self.active = True
     self.solved = False
-    self.game = game
+    self.game: Game = game
 
     self.sequence = [1,2,3,2,1,2,3,2,1,3,4,4,4,4,4,3]
     self.enteredSequence = []
@@ -31,18 +37,18 @@ class Music():
             logging.info("Music Solved")
             self.solved = True
             self.game.toastManager.addToast("Music Challange Solved", 17)
-            set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "puzzle_door_two", False)
+            self.game.doorManager.openDoorById("beach_door")
         else:
           self.reset()
 
   def reset(self) -> None:
     logging.info("Resetting Music")
-    self.game.toastManager.addToast("Music Challange Reset", 17)
     pygame.mixer.music.stop()
+    self.game.toastManager.addToast("Music Challange Reset", 17)
+    self.game.doorManager.closeDoorById("beach_door")
     self.solved = False
     self.sequence = [1,2,3,2,1,2,3,2,1,3,4,4,4,4,4,3]
     self.enteredSequence = []
-    set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "puzzle_door_two", True)
 
   def handle_input(self, event) -> None:
     if event.key == pygame.K_f:
