@@ -41,19 +41,19 @@ class MorseCode():
             self.solved = True
             self.game.toastManager.addToast("Morse Code Solved", 17)
             self.game.doorManager.openDoorById("math_door")
-            set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "puzzle_door_four", False)
+            self.game.doorManager.openDoorById("final_gem_door")
         else:
           self.reset()
 
   def reset(self) -> None:
     logging.info("Resetting Morse Code")
+    self.game.doorManager.closeDoorById("final_gem_door")
     self.game.doorManager.closeDoorById("math_door")
     self.game.toastManager.addToast("Morse Code Reset", 17)
     self.solved = False
     self.sequence = [4,3,6,5,1,2]
     self.enteredSequence = []
     pygame.mixer.music.stop()
-    set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "puzzle_door_four", True)
 
   def handle_input(self, event) -> None:
     if event.key == pygame.K_f:

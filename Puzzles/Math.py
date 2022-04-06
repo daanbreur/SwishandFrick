@@ -1,12 +1,18 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+  from game import Game
+
 import pygame
 import logging
 from utils import set_layer_visibilty, tile_object_to_rect
 
 class Math():
-  def __init__(self, game) -> None:
+  def __init__(self, game: Game) -> None:
     self.active = True
     self.solved = False
-    self.game = game
+    self.game: Game = game
 
     self.sequence = [3, 4, 1, 2]
     self.enteredSequence = []
@@ -29,17 +35,17 @@ class Math():
             logging.info("Math Solved")
             self.solved = True
             self.game.toastManager.addToast("Math Challange Solved", 17)
-            set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "puzzle_door_three", False)
+            self.game.doorManager.openDoorById("morse_door")
         else:
           self.reset()
 
   def reset(self) -> None:
     logging.info("Resetting Math")
     self.game.toastManager.addToast("Math Challange Reset", 17)
+    self.game.doorManager.closeDoorById("morse_door")
     self.solved = False
     self.sequence = [3, 4, 1, 2]
     self.enteredSequence = []
-    set_layer_visibilty(self.game.tmx_data, self.game.map_layer, "puzzle_door_three", True)
 
   def handle_input(self, event) -> None:
     if event.key == pygame.K_f:
