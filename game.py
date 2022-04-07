@@ -4,10 +4,6 @@ import sys
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = '1'
 
-from pathlib import Path
-from turtle import Screen
-from typing import List
-
 import logging
 logging.basicConfig(format='[%(asctime)s] %(levelname)s: %(message)s', datefmt='%d/%m/%Y %H:%M:%S', level=logging.INFO)
 
