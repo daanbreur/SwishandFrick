@@ -31,7 +31,7 @@ jobs:
         release_name: Release ${{ github.ref }}
         body: ${{ needs.changelog.outputs.changelog }}
         draft: false
-        prerelease: ${{ contains(github.ref, "beta") }}
+        prerelease: ${{ contains(github.ref, 'beta') }}
   
   build:
     name: Build Executables
