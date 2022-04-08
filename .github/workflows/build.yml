@@ -73,3 +73,12 @@ jobs:
           asset_content_type: application/zip
           asset_name: 'swishandfrick-${{matrix.config.os}}.zip'
           asset_path: './swishandfrick-${{matrix.config.os}}.zip'
+      - name: Upload ${{ matrix.preset }} to itch.io project
+        uses: josephbmanley/butler-publish-itchio-action@master
+        env:
+          BUTLER_CREDENTIALS: ${{ secrets.ITCHIO_API_KEY }}
+          CHANNEL: ${{ runner.os }}
+          ITCH_GAME: swish-and-frick
+          ITCH_USER: daanbreur
+          PACKAGE: './swishandfrick-${{matrix.config.os}}.zip'
+          VERSION: ${{ github.ref_name }}
