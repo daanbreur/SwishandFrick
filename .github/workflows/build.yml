@@ -93,17 +93,12 @@ jobs:
         with:
           name: ${{matrix.channel}}
           path: './'
-      - name: Display downloaded files
-        run: ls -R
-        working-directory: ./
-
-
-      # - name: Upload ${{ matrix.preset }} to itch.io project
-      #   uses: josephbmanley/butler-publish-itchio-action@master
-      #   env:
-      #     BUTLER_CREDENTIALS: ${{ secrets.ITCHIO_API_KEY }}
-      #     CHANNEL: ${{ runner.os }}
-      #     ITCH_GAME: swish-and-frick
-      #     ITCH_USER: daanbreur
-      #     PACKAGE: './swishandfrick-${{runner.os}}.zip'
-      #     VERSION: ${{ github.ref_name }}
+      - name: Upload ${{ matrix.channel }} to itch.io project
+        uses: josephbmanley/butler-publish-itchio-action@master
+        env:
+          BUTLER_CREDENTIALS: ${{ secrets.ITCHIO_API_KEY }}
+          CHANNEL: ${{ matrix.channel }}
+          ITCH_GAME: swish-and-frick
+          ITCH_USER: daanbreur
+          PACKAGE: './swishandfrick-${{matrix.channel}}.zip'
+          VERSION: ${{ github.ref_name }}
