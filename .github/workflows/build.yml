@@ -62,8 +62,13 @@ jobs:
         with:
           type: 'zip'
           path: './dist'
-          filename: 'swishandfrick-${{matrix.config.os}}.zip'
+          filename: 'swishandfrick-${{runner.os}}.zip'
           exclusions: '*.git*'
+      - name: Upload Artifact for ItchIO Uploader
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{runner.os}}
+          path: swishandfrick-${{runner.os}}.zip
       - name: Upload release assets
         uses: actions/upload-release-asset@v1
         env:
@@ -71,14 +76,34 @@ jobs:
         with:
           upload_url: ${{ needs.create_release.outputs.upload_url }}
           asset_content_type: application/zip
-          asset_name: 'swishandfrick-${{matrix.config.os}}.zip'
-          asset_path: './swishandfrick-${{matrix.config.os}}.zip'
-      - name: Upload ${{ matrix.preset }} to itch.io project
-        uses: josephbmanley/butler-publish-itchio-action@master
-        env:
-          BUTLER_CREDENTIALS: ${{ secrets.ITCHIO_API_KEY }}
-          CHANNEL: ${{ runner.os }}
-          ITCH_GAME: swish-and-frick
-          ITCH_USER: daanbreur
-          PACKAGE: './swishandfrick-${{matrix.config.os}}.zip'
-          VERSION: ${{ github.ref_name }}
+          asset_name: 'swishandfrick-${{runner.os}}.zip'
+          asset_path: './swishandfrick-${{runner.os}}.zip'
+  
+  release_itchio:
+    name: Release on itch.io
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        channel: [Linux, macOS, Windows]
+    steps:
+      - name: Downloading Artifacts for ${{ matrix.channel }}
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{matrix.channel}}
+          path: './'
+      - name: Display downloaded files
+        run: ls -R
+        working-directory: ./
+
+
+      # - name: Upload ${{ matrix.preset }} to itch.io project
+      #   uses: josephbmanley/butler-publish-itchio-action@master
+      #   env:
+      #     BUTLER_CREDENTIALS: ${{ secrets.ITCHIO_API_KEY }}
+      #     CHANNEL: ${{ runner.os }}
+      #     ITCH_GAME: swish-and-frick
+      #     ITCH_USER: daanbreur
+      #     PACKAGE: './swishandfrick-${{runner.os}}.zip'
+      #     VERSION: ${{ github.ref_name }}
