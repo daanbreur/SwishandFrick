@@ -1,41 +1,50 @@
 import pygame
 
-from utils import getFontAtSize
+from utils import get_font_at_size
 
 class MenuButton:
-	def __init__(self, position, size, color=[100, 100, 100], hoverColor=[184, 184, 184], cb=None, text='', fontSize=16, fontColor=[0, 0, 0]):
-		self.color    = color
-		self.size   = size
-		self.func   = cb
-		self.surf   = pygame.Surface(size)
-		self.rect   = self.surf.get_rect(center=position)
+    def __init__(self, position, size, color=None, hover_color=None, cb_=None, text='', font_size=16, font_color=None):
+        if color is None:
+            color = [100, 100, 100]
 
-		if hoverColor: self.hoverColor = hoverColor
-		else: self.hoverColor = color
+        if hover_color is None:
+            hover_color = [184, 184, 184]
 
-		if len(color) == 4:
-			self.surf.set_alpha(color[3])
+        if font_color is None:
+            font_color = [0, 0, 0]
+        
+        self.color = color
+        self.current_color = self.color
+        self.hover_color = hover_color
+        self.font_color = font_color
+        
+        self._size = size
+        self._callback_function = cb_
+        self._surface = pygame.Surface(size)
+        self.rect = self._surface.get_rect(center=position)
+
+        if len(color) == 4:
+            self._surface.set_alpha(color[3])
 
 
-		self.font = getFontAtSize(fontSize=fontSize)
-		self.txt = text
-		self.font_clr = fontColor
-		self.txt_surf = self.font.render(self.txt, 1, self.font_clr)
-		self.txt_rect = self.txt_surf.get_rect(center=[wh//2 for wh in self.size])
+        self.font = get_font_at_size(font_size=font_size)
+        self.txt = text
+        self.txt_surf = self.font.render(self.txt, 1, self.font_color)
+        self.txt_rect = self.txt_surf.get_rect(center=[wh//2 for wh in self._size])
 
-	def draw(self, screen):
-		self.mouseover()
+    def draw(self, screen: pygame.Surface) -> None:
+        self.mouseover()
 
-		self.surf.fill(self.currentColor)
-		self.surf.blit(self.txt_surf, self.txt_rect)
-		screen.blit(self.surf, self.rect)
+        self._surface.fill(self.current_color)
+        self._surface.blit(self.txt_surf, self.txt_rect)
+        screen.blit(self._surface, self.rect)
 
-	def mouseover(self):
-		self.currentColor = self.color
-		pos = pygame.mouse.get_pos()
-		if self.rect.collidepoint(pos):
-			self.currentColor = self.hoverColor
+    def mouseover(self) -> None:
+        self.current_color = self.color
+        pos = pygame.mouse.get_pos()
+        if self.rect.collidepoint(pos):
+            self.current_color = self.hover_color
 
-	def callback(self, *args):
-		if self.func: 
-			return self.func(*args)
+    def callback(self, *args) -> None:
+        if self._callback_function:
+            return self._callback_function(*args)
