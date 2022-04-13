@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from game import Game
     from enums import Gems, Skills
 
+
 class Player(pygame.sprite.Sprite):
     """ This class is the main player object.
     Stores location data, inventory and skills.

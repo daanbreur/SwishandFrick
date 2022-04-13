@@ -13,7 +13,8 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-class Math():
+
+class Math:
     """This class handles logic for the Math puzzle.
     """
     def __init__(self, game: Game) -> None:
@@ -52,17 +53,24 @@ class Math():
                     if not self.solved:
                         logger.info("Math Solved")
                         self.solved = True
-                        self.game.toastManager.add_toast("Math Challenge Solved", 17)
-                        self.game.doorManager.open_door_by_id("morse_door")
+                        self.game.toast_manager.add_toast("Math Challenge Solved", 17)
+                        self.game.door_manager.open_door_by_id("morse_door")
                 else:
                     self.reset()
+
+    def draw(self, screen: pygame.Surface) -> None:
+        """Handles the drawing
+
+        Args:
+            screen (pygame.Surface): screen to draw to.
+        """
 
     def reset(self) -> None:
         """Resets puzzle to default state.
         """
         logger.info("Resetting Math")
-        self.game.toastManager.add_toast("Math Challenge Reset", 17)
-        self.game.doorManager.close_door_by_id("morse_door")
+        self.game.toast_manager.add_toast("Math Challenge Reset", 17)
+        self.game.door_manager.close_door_by_id("morse_door")
         self.solved = False
         self.sequence = [3, 4, 1, 2]
         self.entered_sequence = []

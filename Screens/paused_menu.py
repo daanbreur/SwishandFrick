@@ -13,6 +13,7 @@ from menu_button import MenuButton
 if TYPE_CHECKING:
     from game import Game
 
+
 class PausedMenu:
     """This class handles logic for the PausedMenu Screen.
     """
@@ -24,13 +25,13 @@ class PausedMenu:
         pygame.time.set_timer(UserEvents.PAUSE_BLINK.value, PAUSE_BLINK_TIME_MS)
 
         def resume_game() -> None:
-            self.game.gameState = GameState.IN_GAME
+            self.game.game_state = GameState.IN_GAME
 
         def settings() -> None:
-            self.game.gameState = GameState.SETTINGS
+            self.game.game_state = GameState.SETTINGS
 
         def main_menu() -> None:
-            self.game.gameState = GameState.MAIN_MENU
+            self.game.game_state = GameState.MAIN_MENU
 
         width, height = pygame.display.get_surface().get_size()
         self.buttons: List[MenuButton] = [
@@ -83,11 +84,11 @@ class PausedMenu:
         """
         self.draw_paused = not self.draw_paused
 
-    def handle_click(self, pos: Tuple[int,int]) -> None:
+    def handle_click(self, pos: Tuple[int, int]) -> None:
         """Handles the clicks for the buttons
 
         Args:
-            pos (Tuple[int,int]): current mouse position
+            pos (Tuple[int, int]): current mouse position
         """
         for btn in self.buttons:
             if btn.rect.collidepoint(pos):

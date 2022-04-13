@@ -14,7 +14,8 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-class KonamiCode():
+
+class KonamiCode:
     """ This class handles logic for the KonamiCode puzzle.
     """
     def __init__(self, game: Game) -> None:
@@ -37,6 +38,20 @@ class KonamiCode():
         self.entered_sequence: List[int] = []
         self.index: int = 0
 
+    def update(self, dt_: float) -> None:
+        """Handles update cycle
+
+        Args:
+            dt_ (float): time framedelta
+        """
+
+    def draw(self, screen: pygame.Surface) -> None:
+        """Handles the drawing
+
+        Args:
+            screen (pygame.Surface): screen to draw to.
+        """
+
     def handle_input(self, event: pygame.event.Event) -> None:
         """Handle input from the main game
 
@@ -56,7 +71,7 @@ class KonamiCode():
                 if self.sequence == self.entered_sequence:
                     self.solved = True
                     logger.info("Konamicode entered correctly")
-                    self.game.toastManager.addToast("Konamicode Solved", 17)
+                    self.game.toast_manager.add_toast("Konamicode Solved", 17)
                     if not check_skill(self.game.player, Skills.SWIM):
                         logger.info("Konamicode entered correctly, adding swim skill")
                         add_skill(self.game.player, Skills.SWIM)

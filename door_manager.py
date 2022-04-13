@@ -8,10 +8,11 @@ import pygame
 from utils import tile_object_to_rect, set_layer_visibility
 
 if TYPE_CHECKING:
-    from Player import Player
+    from player import Player
     from game import Game
 
 logger = logging.getLogger(__name__)
+
 
 class Door:
     """ This class implements all door logic. Used inside the DoorManager class
@@ -85,7 +86,7 @@ class Door:
 
         Args:
             sprite (Player): the player object to check the collision with
-            dt (float): dt
+            dt_ (float): dt
         """
         if self.opened_until is not None and pygame.time.get_ticks() > self.opened_until:
             self.opened = False
@@ -139,7 +140,7 @@ class DoorManager:
         """
         if id_ not in self.doors:
             logger.warning("DoorManager: Door with id {} does not exist", id_)
-            return None
+            raise KeyError
         return self.doors[id_]
 
     def open_door_by_id(self, id_: str) -> None:
@@ -192,7 +193,7 @@ class DoorManager:
 
         Args:
             sprite (Player): the player object to check the collision with
-            dt (float): dt
+            dt_ (float): frame timedelta
         """
         for door in self.doors.values():
             door.update(sprite, dt_)

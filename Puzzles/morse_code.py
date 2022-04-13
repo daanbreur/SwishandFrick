@@ -14,7 +14,8 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-class MorseCode():
+
+class MorseCode:
     """This class handles logic for the MorseCode puzzle.
     """
     def __init__(self, game: Game) -> None:
@@ -22,7 +23,7 @@ class MorseCode():
         self.solved: bool = False
         self.game: Game = game
 
-        self.sequence: List[int] = [4,3,6,5,1,2]
+        self.sequence: List[int] = [4, 3, 6, 5, 1, 2]
         self.entered_sequence: List[int] = []
 
         self.mors_button_red_range = tile_object_to_rect(
@@ -62,21 +63,28 @@ class MorseCode():
                     if not self.solved:
                         logger.info("Morse Code Solved")
                         self.solved = True
-                        self.game.toastManager.add_toast("Morse Code Solved", 17)
-                        self.game.doorManager.open_door_by_id("math_door")
-                        self.game.doorManager.open_door_by_id("final_gem_door")
+                        self.game.toast_manager.add_toast("Morse Code Solved", 17)
+                        self.game.door_manager.open_door_by_id("math_door")
+                        self.game.door_manager.open_door_by_id("final_gem_door")
                 else:
                     self.reset()
+
+    def draw(self, screen: pygame.Surface) -> None:
+        """Handles the drawing
+
+        Args:
+            screen (pygame.Surface): screen to draw to.
+        """
 
     def reset(self) -> None:
         """Resets puzzle to default state.
         """
         logger.info("Resetting Morse Code")
-        self.game.doorManager.close_door_by_id("final_gem_door")
-        self.game.doorManager.close_door_by_id("math_door")
-        self.game.toastManager.add_toast("Morse Code Reset", 17)
+        self.game.door_manager.close_door_by_id("final_gem_door")
+        self.game.door_manager.close_door_by_id("math_door")
+        self.game.toast_manager.add_toast("Morse Code Reset", 17)
         self.solved = False
-        self.sequence = [4,3,6,5,1,2]
+        self.sequence = [4, 3, 6, 5, 1, 2]
         self.entered_sequence = []
         pygame.mixer.music.stop()
 
@@ -105,9 +113,9 @@ class MorseCode():
                     self.reset()
                 if sprite.feet.colliderect(self.mors_button_blue_range):
                     logger.info("Playing sound for Morse Code")
-                    self.game.toastManager.add_toast("Playing audio for Morse Code Challenge", 15)
+                    self.game.toast_manager.add_toast("Playing audio for Morse Code Challenge", 15)
                     pygame.mixer.music.load(
-                        resource_path( RESOURCES_DIR / "sounds/morselevel.wav" )
+                        resource_path(RESOURCES_DIR / "sounds/morselevel.wav")
                     )
                     pygame.mixer.music.set_volume(0.7)
                     pygame.mixer.music.play()

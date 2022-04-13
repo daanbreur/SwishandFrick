@@ -17,6 +17,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+
 class SimonSaysButtons(enum.Enum):
     """This class contains the SimonSaysButtons enum.
     """
@@ -25,7 +26,8 @@ class SimonSaysButtons(enum.Enum):
     YELLOW = 'yellow'
     BLUE = 'blue'
 
-class SimonSays():
+
+class SimonSays:
     """This class handles logic for the SimonSays puzzle.
     """
     def __init__(self, game: Game) -> None:
@@ -61,7 +63,7 @@ class SimonSays():
         """Handles the drawing for the simon_says puzzle, to the specified screen
 
         Args:
-            screen (pygame.Surface): screen to draw the toast to.
+            screen (pygame.Surface): screen to draw to.
         """
         if self.show_color:
             if not self.show_color_index > len(self.sequence)-1:
@@ -96,9 +98,9 @@ class SimonSays():
                         self.show_color_index = 0
                         self.show_color = True
                     else:
-                        self.game.toastManager.add_toast("Simon Says Solved", 17)
-                        self.game.doorManager.open_door_by_id("button_door_two")
-                        self.game.doorManager.open_door_by_id("puzzle_door_one")
+                        self.game.toast_manager.add_toast("Simon Says Solved", 17)
+                        self.game.door_manager.open_door_by_id("button_door_two")
+                        self.game.door_manager.open_door_by_id("puzzle_door_one")
                         self.solved = True
                         self.active = False
                 else:
@@ -119,9 +121,9 @@ class SimonSays():
         """Resets puzzle to default state.
         """
         if not self.solved:
-            self.game.toastManager.add_toast("Simon Says Reset", 17)
-            self.game.doorManager.close_door_by_id("button_door_two")
-            self.game.doorManager.close_door_by_id("puzzle_door_one")
+            self.game.toast_manager.add_toast("Simon Says Reset", 17)
+            self.game.door_manager.close_door_by_id("button_door_two")
+            self.game.door_manager.close_door_by_id("puzzle_door_one")
             self.show_color = True
             self.sequence = [random.choice(list(SimonSaysButtons))]
             self.entered_sequence = []

@@ -2,6 +2,7 @@ import pygame
 
 from utils import get_font_at_size
 
+
 class MenuButton:
     def __init__(self, position, size, color=None, hover_color=None, cb_=None, text='', font_size=16, font_color=None):
         if color is None:
@@ -25,7 +26,6 @@ class MenuButton:
 
         if len(color) == 4:
             self._surface.set_alpha(color[3])
-
 
         self.font = get_font_at_size(font_size=font_size)
         self.txt = text

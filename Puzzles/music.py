@@ -14,7 +14,8 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-class Music():
+
+class Music:
     """This class handles logic for the Music puzzle.
     """
     def __init__(self, game: Game) -> None:
@@ -22,7 +23,7 @@ class Music():
         self.solved = False
         self.game: Game = game
 
-        self.sequence: List[int] = [1,2,3,2,1,2,3,2,1,3,4,4,4,4,4,3]
+        self.sequence: List[int] = [1, 2, 3, 2, 1, 2, 3, 2, 1, 3, 4, 4, 4, 4, 4, 3]
         self.entered_sequence: List[int] = []
 
         self.music_button_green_range = tile_object_to_rect(
@@ -56,20 +57,27 @@ class Music():
                     if not self.solved:
                         logger.info("Music Solved")
                         self.solved = True
-                        self.game.toastManager.add_toast("Music Challenge Solved", 17)
-                        self.game.doorManager.open_door_by_id("beach_door")
+                        self.game.toast_manager.add_toast("Music Challenge Solved", 17)
+                        self.game.door_manager.open_door_by_id("beach_door")
                 else:
                     self.reset()
+
+    def draw(self, screen: pygame.Surface) -> None:
+        """Handles the drawing
+
+        Args:
+            screen (pygame.Surface): screen to draw to.
+        """
 
     def reset(self) -> None:
         """Resets puzzle to default state.
         """
         logger.info("Resetting Music")
         pygame.mixer.music.stop()
-        self.game.toastManager.add_toast("Music Challenge Reset", 17)
-        self.game.doorManager.close_door_by_id("beach_door")
+        self.game.toast_manager.add_toast("Music Challenge Reset", 17)
+        self.game.door_manager.close_door_by_id("beach_door")
         self.solved = False
-        self.sequence = [1,2,3,2,1,2,3,2,1,3,4,4,4,4,4,3]
+        self.sequence = [1, 2, 3, 2, 1, 2, 3, 2, 1, 3, 4, 4, 4, 4, 4, 3]
         self.entered_sequence = []
 
     def handle_input(self, event) -> None:
@@ -81,26 +89,26 @@ class Music():
         if event.key == pygame.K_f:
             for sprite in self.game.group.sprites():
                 if sprite.feet.colliderect(self.music_button_one_range):
-                    pygame.mixer.music.load(resource_path( RESOURCES_DIR / "sounds/notes1.wav" ))
+                    pygame.mixer.music.load(resource_path(RESOURCES_DIR / "sounds/notes1.wav"))
                     pygame.mixer.music.play()
                     self.entered_sequence.append(1)
                 if sprite.feet.colliderect(self.music_button_two_range):
-                    pygame.mixer.music.load(resource_path( RESOURCES_DIR / "sounds/notes2.wav" ))
+                    pygame.mixer.music.load(resource_path(RESOURCES_DIR / "sounds/notes2.wav"))
                     pygame.mixer.music.play()
                     self.entered_sequence.append(2)
                 if sprite.feet.colliderect(self.music_button_three_range):
-                    pygame.mixer.music.load(resource_path( RESOURCES_DIR / "sounds/notes3.wav" ))
+                    pygame.mixer.music.load(resource_path(RESOURCES_DIR / "sounds/notes3.wav"))
                     pygame.mixer.music.play()
                     self.entered_sequence.append(3)
                 if sprite.feet.colliderect(self.music_button_four_range):
-                    pygame.mixer.music.load(resource_path( RESOURCES_DIR / "sounds/notes4.wav" ))
+                    pygame.mixer.music.load(resource_path(RESOURCES_DIR / "sounds/notes4.wav"))
                     pygame.mixer.music.play()
                     self.entered_sequence.append(4)
 
                 if sprite.feet.colliderect(self.music_button_green_range):
                     logger.info("Playing music for Music Challenge")
-                    self.game.toastManager.add_toast("Playing audio for Music Challenge", 15)
-                    pygame.mixer.music.load(resource_path( RESOURCES_DIR / "sounds/songlevel.wav" ))
+                    self.game.toast_manager.add_toast("Playing audio for Music Challenge", 15)
+                    pygame.mixer.music.load(resource_path(RESOURCES_DIR / "sounds/songlevel.wav"))
                     pygame.mixer.music.play()
                 if sprite.feet.colliderect(self.music_button_red_range):
                     self.reset()

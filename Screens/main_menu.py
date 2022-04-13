@@ -26,7 +26,7 @@ class MainMenu:
         self.font: pygame.font.Font = get_font_at_size(font_size=30)
 
         def start_game() -> None:
-            self.game.gameState = GameState.IN_GAME
+            self.game.game_state = GameState.IN_GAME
 
         def close_game() -> None:
             self.game.running = False

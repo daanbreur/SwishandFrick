@@ -13,7 +13,9 @@ if TYPE_CHECKING:
     from game import Game
 
 logger = logging.getLogger(__name__)
-class LeverCombination():
+
+
+class LeverCombination:
     """ This class handles logic for the LeverCombination puzzle.
     """
     def __init__(self, game: Game) -> None:
@@ -58,14 +60,21 @@ class LeverCombination():
                     if not self.solved:
                         logger.info("LeverCombination Solved")
                         self.solved = True
-                        self.game.toastManager.addToast("Lever Combination Solved", 17)
+                        self.game.toast_manager.add_toast("Lever Combination Solved", 17)
                         add_skill(self.game.player, Skills.HAMMER)
+
+    def draw(self, screen: pygame.Surface) -> None:
+        """Handles the drawing
+
+        Args:
+            screen (pygame.Surface): screen to draw to.
+        """
 
     def reset(self) -> None:
         """Resets puzzle to default state.
         """
         logger.info("Resetting LeverCombination")
-        self.game.toastManager.addToast("Lever Combination Reset", 17)
+        self.game.toast_manager.add_toast("Lever Combination Reset", 17)
         self.solved = False
         self.sequence = [True, True, False, False, False, True]
         self.entered_sequence = [False, False, False, False, False, False]

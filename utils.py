@@ -13,10 +13,11 @@ if TYPE_CHECKING:
     import pytmx
     import pyscroll
     from pathlib import Path
-    from Player import Player
+    from player import Player
     from enums import Skills, Gems
 
 logger = logging.getLogger(__name__)
+
 
 def resource_path(relative_path: Union[Path, str]) -> str:
     """Get absolute path to resource, for dev and for PyInstaller
@@ -28,10 +29,11 @@ def resource_path(relative_path: Union[Path, str]) -> str:
         str: full path to resource
     """
     try:
-        base_path = sys._MEIPASS # pylint: disable=W0212 disable=E1101
+        base_path = sys._MEIPASS  # pylint: disable=W0212 disable=E1101
     except AttributeError:
         base_path = os.path.abspath(".")
     return os.path.join(base_path, relative_path)
+
 
 def initialize_screen(width: int, height: int) -> pygame.Surface:
     """Initialize new screen with given width and height
@@ -47,6 +49,7 @@ def initialize_screen(width: int, height: int) -> pygame.Surface:
     logger.info("Initialized screen with size {}", screen.get_size())
     return screen
 
+
 def load_image(filename: str) -> pygame.Surface:
     """Load image from file
 
@@ -57,6 +60,7 @@ def load_image(filename: str) -> pygame.Surface:
         pygame.Surface: image surface loaded from file
     """
     return pygame.image.load(resource_path(RESOURCES_DIR / filename))
+
 
 def get_font_at_size(font_name="Level Up Level Up.otf", font_size=16) -> pygame.font.Font:
     """Get font at given size
@@ -69,6 +73,7 @@ def get_font_at_size(font_name="Level Up Level Up.otf", font_size=16) -> pygame.
         pygame.font.Font: font instance at given size and font
     """
     return pygame.font.Font(resource_path(RESOURCES_DIR / "fonts" / font_name), font_size)
+
 
 def set_layer_visibility(
     tmx_data: pytmx.TiledMap,
@@ -86,8 +91,9 @@ def set_layer_visibility(
     """
     tmx_data.get_layer_by_name(layer_name).visible = visible
     map_layer.data.tmx = tmx_data
-    map_layer.redraw_tiles(map_layer._buffer) # pylint: disable=W0212
+    map_layer.redraw_tiles(map_layer._buffer)  # pylint: disable=W0212
     logger.debug("Set {} visible to {}", layer_name, visible)
+
 
 def get_layer_visibility(tmx_data: pytmx.TiledMap, layer_name: str) -> bool:
     """Get the visibility of the specified layer
@@ -101,6 +107,7 @@ def get_layer_visibility(tmx_data: pytmx.TiledMap, layer_name: str) -> bool:
     """
     return tmx_data.get_layer_by_name(layer_name).visible
 
+
 def add_skill(player: Player, skill: Skills) -> None:
     """Add skill to players inventory
 
@@ -109,9 +116,10 @@ def add_skill(player: Player, skill: Skills) -> None:
         skill (Skills): skill to add to player
     """
     if not check_skill(player, skill):
-        player.game.toastManager.addToast(f"You now have {skill.name}!")
+        player.game.toast_manager.add_toast(f"You now have {skill.name}!")
         logger.info("add_skill {} to {}", skill, player.skills)
         player.skills.append(skill)
+
 
 def check_skill(player: Player, skill: Skills) -> bool:
     """Check if player has skill
@@ -125,6 +133,7 @@ def check_skill(player: Player, skill: Skills) -> bool:
     """
     return skill in player.skills
 
+
 def add_gem(player: Player, gem: Gems) -> None:
     """Add gem to players inventory
 
@@ -133,9 +142,10 @@ def add_gem(player: Player, gem: Gems) -> None:
         gem (Gems): gem to add to player
     """
     if not check_gem(player, gem):
-        player.game.toastManager.addToast(f"You found a {gem.name} Gem!")
+        player.game.toast_manager.add_toast(f"You found a {gem.name} Gem!")
         logger.info("add_gem {} to {}", gem, player.inventory)
         player.inventory.append(gem)
+
 
 def remove_gem(player: Player, gem: Gems) -> None:
     """Remove gem from players inventory
@@ -145,9 +155,10 @@ def remove_gem(player: Player, gem: Gems) -> None:
         gem (Gems): gem to remove from player
     """
     if not check_gem(player, gem):
-        player.game.toastManager.addToast(f"You lost a {gem.name} Gem!")
+        player.game.toast_manager.add_toast(f"You lost a {gem.name} Gem!")
         logger.info("remove_gem {} from {}", gem, player.inventory)
         player.inventory.remove(gem)
+
 
 def check_gem(player: Player, gem: Gems) -> bool:
     """Check if player has gem
@@ -160,6 +171,7 @@ def check_gem(player: Player, gem: Gems) -> bool:
         bool: True if player has gem, False otherwise
     """
     return gem in player.inventory
+
 
 def tile_object_to_rect(tile_object: pytmx.TiledObject) -> pygame.Rect:
     """Convert a pytmx.TiledObject to a pygame.Rect
