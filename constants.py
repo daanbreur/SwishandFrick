@@ -1,3 +1,5 @@
+"""Store all constants used by the game"""
+
 from pathlib import Path
 
 CURRENT_DIR = Path(__file__).parent
