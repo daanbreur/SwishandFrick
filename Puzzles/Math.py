@@ -1,58 +1,86 @@
+"""math module: contains the Math class."""
+
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
+
+import logging
+import pygame
+
+from utils import tile_object_to_rect
 
 if TYPE_CHECKING:
-  from game import Game
-
-import pygame
-import logging
-from utils import set_layer_visibilty, tile_object_to_rect
+    from game import Game
 
 class Math():
-  def __init__(self, game: Game) -> None:
-    self.active = True
-    self.solved = False
-    self.game: Game = game
+    """This class handles logic for the Math puzzle.
+    """
+    def __init__(self, game: Game) -> None:
+        self.active: bool = True
+        self.solved: bool = False
+        self.game: Game = game
 
-    self.sequence = [3, 4, 1, 2]
-    self.enteredSequence = []
+        self.sequence: List[int] = [3, 4, 1, 2]
+        self.entered_sequence: List[int] = []
 
-    self.math_button_red_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("math_button_red_range")[0])
+        self.math_button_red_range = tile_object_to_rect(
+            self.game.tmx_data.get_layer_by_name("math_button_red_range")[0]
+        )
+        self.math_button_one_range = tile_object_to_rect(
+            self.game.tmx_data.get_layer_by_name("math_button_one_range")[0]
+        )
+        self.math_button_two_range = tile_object_to_rect(
+            self.game.tmx_data.get_layer_by_name("math_button_two_range")[0]
+        )
+        self.math_button_three_range = tile_object_to_rect(
+            self.game.tmx_data.get_layer_by_name("math_button_three_range")[0]
+        )
+        self.math_button_four_range = tile_object_to_rect(
+            self.game.tmx_data.get_layer_by_name("math_button_four_range")[0]
+        )
 
-    self.math_button_one_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("math_button_one_range")[0])
-    self.math_button_two_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("math_button_two_range")[0])
-    self.math_button_three_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("math_button_three_range")[0])
-    self.math_button_four_range = tile_object_to_rect(self.game.tmx_data.get_layer_by_name("math_button_four_range")[0])
+    def update(self, dt_: float) -> None:
+        """Handles the update cycle for the puzzle
 
-  def draw(self, screen: pygame.Surface) -> None:
-    return
-  
-  def update(self, df: float) -> None:
-    if self.active:
-      if len(self.enteredSequence) >= len(self.sequence):
-        if self.sequence == self.enteredSequence:
-          if not self.solved:
-            logging.info("Math Solved")
-            self.solved = True
-            self.game.toastManager.addToast("Math Challange Solved", 17)
-            self.game.doorManager.openDoorById("morse_door")
-        else:
-          self.reset()
+        Args:
+            dt_ (float): frame timedelta
+        """
+        if self.active:
+            if len(self.entered_sequence) >= len(self.sequence):
+                if self.sequence == self.entered_sequence:
+                    if not self.solved:
+                        logging.info("Math Solved")
+                        self.solved = True
+                        self.game.toastManager.add_toast("Math Challenge Solved", 17)
+                        self.game.doorManager.open_door_by_id("morse_door")
+                else:
+                    self.reset()
 
-  def reset(self) -> None:
-    logging.info("Resetting Math")
-    self.game.toastManager.addToast("Math Challange Reset", 17)
-    self.game.doorManager.closeDoorById("morse_door")
-    self.solved = False
-    self.sequence = [3, 4, 1, 2]
-    self.enteredSequence = []
+    def reset(self) -> None:
+        """Resets puzzle to default state.
+        """
+        logging.info("Resetting Math")
+        self.game.toastManager.add_toast("Math Challenge Reset", 17)
+        self.game.doorManager.close_door_by_id("morse_door")
+        self.solved = False
+        self.sequence = [3, 4, 1, 2]
+        self.entered_sequence = []
 
-  def handle_input(self, event) -> None:
-    if event.key == pygame.K_f:
-      for sprite in self.game.group.sprites():
-        if sprite.feet.colliderect(self.math_button_one_range): self.enteredSequence.append(1)
-        if sprite.feet.colliderect(self.math_button_two_range): self.enteredSequence.append(2)
-        if sprite.feet.colliderect(self.math_button_three_range): self.enteredSequence.append(3)
-        if sprite.feet.colliderect(self.math_button_four_range): self.enteredSequence.append(4)
+    def handle_input(self, event: pygame.event.Event) -> None:
+        """Handles user input, checks for collision with button
 
-        if sprite.feet.colliderect(self.math_button_red_range): self.reset()
+        Args:
+            event (pygame.event.Event): pygame event object
+        """
+        if event.key == pygame.K_f:
+            for sprite in self.game.group.sprites():
+                if sprite.feet.colliderect(self.math_button_one_range):
+                    self.entered_sequence.append(1)
+                if sprite.feet.colliderect(self.math_button_two_range):
+                    self.entered_sequence.append(2)
+                if sprite.feet.colliderect(self.math_button_three_range):
+                    self.entered_sequence.append(3)
+                if sprite.feet.colliderect(self.math_button_four_range):
+                    self.entered_sequence.append(4)
+
+                if sprite.feet.colliderect(self.math_button_red_range):
+                    self.reset()
