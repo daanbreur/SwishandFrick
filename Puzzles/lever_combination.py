@@ -12,6 +12,7 @@ from utils import add_skill, get_layer_visibility, set_layer_visibility, tile_ob
 if TYPE_CHECKING:
     from game import Game
 
+logger = logging.getLogger(__name__)
 class LeverCombination():
     """ This class handles logic for the LeverCombination puzzle.
     """
@@ -55,7 +56,7 @@ class LeverCombination():
             if self.game.player.feet.colliderect(self.lever_complete_range):
                 if self.sequence == self.entered_sequence:
                     if not self.solved:
-                        logging.info("LeverCombination Solved")
+                        logger.info("LeverCombination Solved")
                         self.solved = True
                         self.game.toastManager.addToast("Lever Combination Solved", 17)
                         add_skill(self.game.player, Skills.HAMMER)
@@ -63,7 +64,7 @@ class LeverCombination():
     def reset(self) -> None:
         """Resets puzzle to default state.
         """
-        logging.info("Resetting LeverCombination")
+        logger.info("Resetting LeverCombination")
         self.game.toastManager.addToast("Lever Combination Reset", 17)
         self.solved = False
         self.sequence = [True, True, False, False, False, True]

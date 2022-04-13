@@ -11,6 +11,8 @@ from utils import tile_object_to_rect
 if TYPE_CHECKING:
     from game import Game
 
+logger = logging.getLogger(__name__)
+
 class Math():
     """This class handles logic for the Math puzzle.
     """
@@ -48,7 +50,7 @@ class Math():
             if len(self.entered_sequence) >= len(self.sequence):
                 if self.sequence == self.entered_sequence:
                     if not self.solved:
-                        logging.info("Math Solved")
+                        logger.info("Math Solved")
                         self.solved = True
                         self.game.toastManager.add_toast("Math Challenge Solved", 17)
                         self.game.doorManager.open_door_by_id("morse_door")
@@ -58,7 +60,7 @@ class Math():
     def reset(self) -> None:
         """Resets puzzle to default state.
         """
-        logging.info("Resetting Math")
+        logger.info("Resetting Math")
         self.game.toastManager.add_toast("Math Challenge Reset", 17)
         self.game.doorManager.close_door_by_id("morse_door")
         self.solved = False

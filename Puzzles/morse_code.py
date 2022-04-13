@@ -12,6 +12,8 @@ from utils import resource_path, tile_object_to_rect
 if TYPE_CHECKING:
     from game import Game
 
+logger = logging.getLogger(__name__)
+
 class MorseCode():
     """This class handles logic for the MorseCode puzzle.
     """
@@ -58,7 +60,7 @@ class MorseCode():
             if len(self.entered_sequence) >= len(self.sequence):
                 if self.sequence == self.entered_sequence:
                     if not self.solved:
-                        logging.info("Morse Code Solved")
+                        logger.info("Morse Code Solved")
                         self.solved = True
                         self.game.toastManager.add_toast("Morse Code Solved", 17)
                         self.game.doorManager.open_door_by_id("math_door")
@@ -69,7 +71,7 @@ class MorseCode():
     def reset(self) -> None:
         """Resets puzzle to default state.
         """
-        logging.info("Resetting Morse Code")
+        logger.info("Resetting Morse Code")
         self.game.doorManager.close_door_by_id("final_gem_door")
         self.game.doorManager.close_door_by_id("math_door")
         self.game.toastManager.add_toast("Morse Code Reset", 17)
@@ -102,7 +104,7 @@ class MorseCode():
                 if sprite.feet.colliderect(self.mors_button_red_range):
                     self.reset()
                 if sprite.feet.colliderect(self.mors_button_blue_range):
-                    logging.info("Playing sound for Morse Code")
+                    logger.info("Playing sound for Morse Code")
                     self.game.toastManager.add_toast("Playing audio for Morse Code Challenge", 15)
                     pygame.mixer.music.load(
                         resource_path( RESOURCES_DIR / "sounds/morselevel.wav" )

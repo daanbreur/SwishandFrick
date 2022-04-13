@@ -12,6 +12,8 @@ from utils import resource_path, tile_object_to_rect
 if TYPE_CHECKING:
     from game import Game
 
+logger = logging.getLogger(__name__)
+
 class Music():
     """This class handles logic for the Music puzzle.
     """
@@ -52,7 +54,7 @@ class Music():
             if len(self.entered_sequence) >= len(self.sequence):
                 if self.sequence == self.entered_sequence:
                     if not self.solved:
-                        logging.info("Music Solved")
+                        logger.info("Music Solved")
                         self.solved = True
                         self.game.toastManager.add_toast("Music Challenge Solved", 17)
                         self.game.doorManager.open_door_by_id("beach_door")
@@ -62,7 +64,7 @@ class Music():
     def reset(self) -> None:
         """Resets puzzle to default state.
         """
-        logging.info("Resetting Music")
+        logger.info("Resetting Music")
         pygame.mixer.music.stop()
         self.game.toastManager.add_toast("Music Challenge Reset", 17)
         self.game.doorManager.close_door_by_id("beach_door")
@@ -96,7 +98,7 @@ class Music():
                     self.entered_sequence.append(4)
 
                 if sprite.feet.colliderect(self.music_button_green_range):
-                    logging.info("Playing music for Music Challenge")
+                    logger.info("Playing music for Music Challenge")
                     self.game.toastManager.add_toast("Playing audio for Music Challenge", 15)
                     pygame.mixer.music.load(resource_path( RESOURCES_DIR / "sounds/songlevel.wav" ))
                     pygame.mixer.music.play()
