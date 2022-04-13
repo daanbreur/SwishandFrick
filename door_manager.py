@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 import logging
 import pygame
-from utils import tile_object_to_rect, set_layer_visibilty
+from utils import tile_object_to_rect, set_layer_visibility
 
 if TYPE_CHECKING:
     from Player import Player
@@ -37,7 +37,7 @@ class Door:
         """Opens the door indefinitely until manually closed
         """
         self.opened = True
-        set_layer_visibilty(
+        set_layer_visibility(
             self.game.tmx_data, self.game.map_layer, self.sprite_layer, False
         )
 
@@ -45,7 +45,7 @@ class Door:
         """Closes the door indefinitely until manually opened
         """
         self.opened = False
-        set_layer_visibilty(
+        set_layer_visibility(
             self.game.tmx_data, self.game.map_layer, self.sprite_layer, True
         )
 
@@ -57,7 +57,7 @@ class Door:
         """
         self.opened = True
         self.opened_until = pygame.time.get_ticks() + millis
-        set_layer_visibilty(
+        set_layer_visibility(
             self.game.tmx_data, self.game.map_layer, self.sprite_layer, False
         )
 
@@ -68,7 +68,7 @@ class Door:
             opened (bool): open/true or closed/false the state to set the door to
         """
         self.opened = opened
-        set_layer_visibilty(
+        set_layer_visibility(
             self.game.tmx_data, self.game.map_layer, self.sprite_layer, not opened
         )
 
@@ -80,7 +80,7 @@ class Door:
         """
         return self.opened
 
-    def update(self, sprite: Player, dt: float) -> None:
+    def update(self, sprite: Player, dt_: float) -> None:
         """Handles the colliding with the door for the player
 
         Args:
@@ -90,11 +90,11 @@ class Door:
         if self.opened_until is not None and pygame.time.get_ticks() > self.opened_until:
             self.opened = False
             self.opened_until = None
-            set_layer_visibilty(
+            set_layer_visibility(
                 self.game.tmx_data, self.game.map_layer, self.sprite_layer, True
             )
         if sprite.feet.colliderect(self.collider) and not self.opened:
-            sprite.move_back(dt)
+            sprite.move_back(dt_)
 
 
 class DoorManager:
@@ -187,7 +187,7 @@ class DoorManager:
         logger.info("DoorManager: Closing door with id {}", id_)
         self.doors[id_].close()
 
-    def update(self, sprite: Player, dt: float) -> None:
+    def update(self, sprite: Player, dt_: float) -> None:
         """Handles the colliding with all doors and the player
 
         Args:
@@ -195,4 +195,4 @@ class DoorManager:
             dt (float): dt
         """
         for door in self.doors.values():
-            door.update(sprite, dt)
+            door.update(sprite, dt_)
