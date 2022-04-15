@@ -1,4 +1,6 @@
+"""game module: Contains main entrypoint for the game"""
 from __future__ import annotations
+# pylint: disable=R0902,R0912
 
 import logging
 import os
@@ -50,7 +52,7 @@ def init_logging():
     root_logger.addHandler(console_handler)
 
     file_handler = logging.FileHandler(
-        "{:%Y-%m-%d_%H-%M-%S}.log".format(datetime.now())
+        f"{datetime.now():%Y-%m-%d_%H-%M-%S}.log"
     )
     file_level = "DEBUG"
     file_handler.setLevel(file_level)
@@ -64,6 +66,8 @@ logger = logging.getLogger(__name__)
 
 
 class Game:
+    """Contains whole game state
+    """
     map_path = resource_path(RESOURCES_DIR / "map.tmx")
 
     def __init__(self, screen: pygame.Surface) -> None:
@@ -109,6 +113,8 @@ class Game:
         }
 
     def draw(self) -> None:
+        """Draws current active menu
+        """
         if self.game_state == GameState.MAIN_MENU:
             self.menus["mainmenu"].draw(self.screen)
         if self.game_state == GameState.SETTINGS:
@@ -123,12 +129,17 @@ class Game:
             self.toast_manager.draw(self.screen)
 
     def handle_input(self) -> None:
+        """Handle input for everything game related
+        - Movement
+        - Buttons
+        - Resizes
+        """
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
                 break
 
-            elif event.type == UserEvents.PAUSE_BLINK.value:
+            if event.type == UserEvents.PAUSE_BLINK.value:
                 self.menus["pausemenu"].blink()
             elif event.type == UserEvents.SIMON_SAYS_BLINK.value:
                 self.puzzles["simonsays"].next_color()
@@ -146,7 +157,8 @@ class Game:
                 ):
                     self.running = False
                     break
-                elif (
+
+                if (
                     event.key == pygame.K_ESCAPE and self.game_state == GameState.IN_GAME
                 ):
                     self.game_state = GameState.PAUSE_MENU
@@ -205,6 +217,11 @@ class Game:
                 self.player.velocity[0] = 0
 
     def update(self, dt_: float) -> None:
+        """Handle update cycle for everything game
+
+        Args:
+            dt_ (float): frame timedelta
+        """
         self.menus["ingame"].update(dt_)
         for puzzle in self.puzzles.values():
             if puzzle.active:
@@ -227,6 +244,8 @@ class Game:
 
 
 def main() -> None:
+    """Main initialize function, only execute when `__main__`
+    """
     logger.debug("Python version: {}", str(sys.version))
     logger.debug("Pygame version: {}", str(pygame.version.ver))
     logger.debug("Pytmx version: {}", str(pytmx.__version__))

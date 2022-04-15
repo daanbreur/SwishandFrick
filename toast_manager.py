@@ -112,7 +112,8 @@ class ToastManager:
         """
         if len(self._toast_queue) > 0:
             if self._toast_queue[0].start_show_time == 0 or \
-                    pygame.time.get_ticks() - self._toast_queue[0].start_show_time < TOAST_SHOW_TIME_MS:
+                    (pygame.time.get_ticks() -
+                     self._toast_queue[0].start_show_time < TOAST_SHOW_TIME_MS):
                 self._toast_queue[0].draw(screen)
             else:
                 logger.info("Removing toast {}", self._toast_queue[0])
