@@ -1,0 +1,10 @@
+{
+  "python.linting.enabled": true,
+  "python.linting.pylintEnabled": true,
+  "python.linting.lintOnSave": true,
+  "python.formatting.provider": "black",
+  "python.languageServer": "Pylance",
+  "editor.detectIndentation": false,
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true
+}
