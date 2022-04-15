@@ -15,15 +15,22 @@ logger = logging.getLogger(__name__)
 class ToastPopup:
     """ This class implements all toast logic. Used inside the ToastManager class
     """
-    def __init__(self, screen_dimensions: Tuple[int, int], text: str = '', font_size: int = 18) -> None:
-        self.start_show_time: int = 0
+    def __init__(self,
+                 screen_dimensions: Tuple[int, int],
+                 text: str = '',
+                 font_size: int = 18) -> None:
+        self._start_show_time: int = 0
         self._text: str = text
         self._font_color: Tuple[int, int, int] = (255, 255, 255)
         self._color: Tuple[int, int, int] = (69, 69, 69)
         self._screen_dimensions: Tuple[int, int] = screen_dimensions
 
         self._font: pygame.font.Font = get_font_at_size(font_size=font_size)
-        self._text_surface: pygame.surface.Surface = self._font.render(self._text, True, self._font_color)
+        self._text_surface: pygame.surface.Surface = self._font.render(
+            self._text,
+            True,
+            self._font_color
+        )
         self._text_width, self._text_height = self._text_surface.get_size()
 
         self.surf = pygame.Surface(
@@ -40,14 +47,32 @@ class ToastPopup:
             center=[wh//2 for wh in self.surf.get_size()]
         )
 
+    @property
+    def start_show_time(self):
+        """Get start show time in milliseconds
+
+        Returns:
+            int: time in milliseconds it started to show
+        """
+        return int(self._start_show_time)
+
+    @start_show_time.setter
+    def start_show_time(self, value: int):
+        """Set _start_show_time in milliseconds
+
+        Args:
+            value (int): time to set _start_show_time to in milliseconds
+        """
+        self._start_show_time = value
+
     def draw(self, screen: pygame.Surface) -> None:
         """Draws toast to the specified screen.
 
         Args:
             screen (pygame.Surface): screen to draw the toast to.
         """
-        if self.start_show_time == 0:
-            self.start_show_time = pygame.time.get_ticks()
+        if self._start_show_time == 0:
+            self._start_show_time = pygame.time.get_ticks()
         self.surf.fill(self._color)
         self.surf.blit(self._text_surface, self._text_rectangle)
         screen.blit(self.surf, self.rect)
@@ -87,7 +112,7 @@ class ToastManager:
         """
         if len(self._toast_queue) > 0:
             if self._toast_queue[0].start_show_time == 0 or \
-            pygame.time.get_ticks() - self._toast_queue[0].start_show_time < TOAST_SHOW_TIME_MS:
+                    pygame.time.get_ticks() - self._toast_queue[0].start_show_time < TOAST_SHOW_TIME_MS:
                 self._toast_queue[0].draw(screen)
             else:
                 logger.info("Removing toast {}", self._toast_queue[0])

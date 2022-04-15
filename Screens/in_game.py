@@ -4,7 +4,14 @@ from typing import TYPE_CHECKING
 import logging
 import pygame
 from enums import Skills, Gems
-from utils import add_skill, check_skill, get_layer_visibility, get_font_at_size, set_layer_visibility, check_gem, add_gem, tile_object_to_rect
+from utils import add_skill, \
+    check_skill, \
+    get_layer_visibility, \
+    get_font_at_size, \
+    set_layer_visibility, \
+    check_gem, \
+    add_gem, \
+    tile_object_to_rect
 
 if TYPE_CHECKING:
     from game import Game
@@ -38,16 +45,16 @@ class Ingame:
             )
             self.walls.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
 
-        self.shallowwater = []
+        self.shallow_water = []
         for obj in self.game.tmx_data.get_layer_by_name("shallowwater")[:]:
             logger.info(
-                "Created Shallowwater at {}, {} with dimensions {}, {}",
+                "Created Shallow Water at {}, {} with dimensions {}, {}",
                 obj.x,
                 obj.y,
                 obj.width,
                 obj.height
             )
-            self.shallowwater.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
+            self.shallow_water.append(pygame.Rect(obj.x, obj.y, obj.width, obj.height))
 
         self.soft_wall_low_range = []
         for obj in self.game.tmx_data.get_layer_by_name("soft_wall_low_range")[:]:
@@ -254,13 +261,22 @@ class Ingame:
         self.game.group.draw(screen)
         sign_one = self.font.render("Do the konami code", False, (255, 255, 255))
         if self.konami_text_show:
-            screen.blit(sign_one, (screen.get_width()/2, screen.get_height()/2 - sign_one.get_height()/2 - 50))
+            screen.blit(
+                sign_one,
+                (screen.get_width()/2, screen.get_height()/2 - sign_one.get_height()/2 - 50)
+            )
         sign_two = self.font.render("RRLLLR", False, (255, 255, 255))
         if self.simon_text_show:
-            screen.blit(sign_two, (screen.get_width()/2, screen.get_height()/2 - sign_two.get_height()/2 - 50))
+            screen.blit(
+                sign_two,
+                (screen.get_width()/2, screen.get_height()/2 - sign_two.get_height()/2 - 50)
+            )
         sign_three = self.font.render("(((squareroot of 6512704) + 7)/3)*4", False, (255, 255, 255))
         if self.math_text_show:
-            screen.blit(sign_three, (screen.get_width()/2, screen.get_height()/2 - sign_three.get_height()/2 - 50))
+            screen.blit(
+                sign_three,
+                (screen.get_width()/2, screen.get_height()/2 - sign_three.get_height()/2 - 50)
+            )
 
     def handle_input(self, event) -> None:
         if event.type == pygame.KEYDOWN:
@@ -273,56 +289,71 @@ class Ingame:
     def update(self, dt_: float) -> None:
         self.game.group.update(dt_)
 
-        def add_and_hide_skill(layername: str, skill: Skills) -> None:
-            set_layer_visibility(self.game.tmx_data, self.game.map_layer, layername, False)
+        def add_and_hide_skill(layer_name: str, skill: Skills) -> None:
+            set_layer_visibility(self.game.tmx_data, self.game.map_layer, layer_name, False)
             add_skill(sprite, skill)
 
-        def add_and_hide_gem(layername: str, gem: Gems) -> None:
-            set_layer_visibility(self.game.tmx_data, self.game.map_layer, layername, False)
+        def add_and_hide_gem(layer_name: str, gem: Gems) -> None:
+            set_layer_visibility(self.game.tmx_data, self.game.map_layer, layer_name, False)
             add_gem(sprite, gem)
 
-        def hide_layer(layername: str) -> None:
-            set_layer_visibility(self.game.tmx_data, self.game.map_layer, layername, False)
+        def hide_layer(layer_name: str) -> None:
+            set_layer_visibility(self.game.tmx_data, self.game.map_layer, layer_name, False)
 
         for sprite in self.game.group.sprites():
             self.game.door_manager.update(sprite, dt_)
 
             if sprite.feet.collidelist(self.walls) > -1:
                 sprite.move_back(dt_)
-            if sprite.feet.collidelist(self.shallowwater) > -1 and Skills.SWIM not in sprite.skills:
+            if sprite.feet.collidelist(self.shallow_water) > -1 and \
+                    Skills.SWIM not in sprite.skills:
                 sprite.move_back(dt_)
 
-            if sprite.feet.colliderect(self.blue_gem_collider) and not check_gem(sprite, Gems.BLUE):
+            if sprite.feet.colliderect(self.blue_gem_collider) and \
+                    not check_gem(sprite, Gems.BLUE):
                 add_and_hide_gem("blue_gem", Gems.BLUE)
-            if sprite.feet.colliderect(self.red_gem_collider) and not check_gem(sprite, Gems.RED):
+            if sprite.feet.colliderect(self.red_gem_collider) and \
+                    not check_gem(sprite, Gems.RED):
                 add_and_hide_gem("red_gem", Gems.RED)
-            if sprite.feet.colliderect(self.purple_gem_collider) and not check_gem(sprite, Gems.PURPLE):
+            if sprite.feet.colliderect(self.purple_gem_collider) and \
+                    not check_gem(sprite, Gems.PURPLE):
                 add_and_hide_gem("purple_gem", Gems.PURPLE)
-            if sprite.feet.colliderect(self.green_gem_collider) and not check_gem(sprite, Gems.GREEN):
+            if sprite.feet.colliderect(self.green_gem_collider) and \
+                    not check_gem(sprite, Gems.GREEN):
                 add_and_hide_gem("green_gem", Gems.GREEN)
-            if sprite.feet.colliderect(self.orange_gem_collider) and not check_gem(sprite, Gems.ORANGE):
+            if sprite.feet.colliderect(self.orange_gem_collider) and \
+                    not check_gem(sprite, Gems.ORANGE):
                 add_and_hide_gem("orange_gem", Gems.ORANGE)
-            if sprite.feet.colliderect(self.pink_gem_collider) and not check_gem(sprite, Gems.PINK):
+            if sprite.feet.colliderect(self.pink_gem_collider) and \
+                    not check_gem(sprite, Gems.PINK):
                 add_and_hide_gem("pink_gem", Gems.PINK)
-            if sprite.feet.colliderect(self.lemon_gem_collider) and not check_gem(sprite, Gems.LEMON):
+            if sprite.feet.colliderect(self.lemon_gem_collider) and \
+                    not check_gem(sprite, Gems.LEMON):
                 add_and_hide_gem("lemon_gem", Gems.LEMON)
-            if sprite.feet.colliderect(self.gear_collider) and not check_gem(sprite, Gems.GEAR):
+            if sprite.feet.colliderect(self.gear_collider) and \
+                    not check_gem(sprite, Gems.GEAR):
                 add_and_hide_gem("gear", Gems.GEAR)
-            if sprite.feet.colliderect(self.boots_collider) and not check_skill(sprite, Skills.RUN):
+            if sprite.feet.colliderect(self.boots_collider) and \
+                    not check_skill(sprite, Skills.RUN):
                 add_and_hide_skill("boots", Skills.RUN)
-            if sprite.feet.colliderect(self.red_key_collider) and not check_gem(sprite, Gems.KEY):
+            if sprite.feet.colliderect(self.red_key_collider) and \
+                    not check_gem(sprite, Gems.KEY):
                 add_and_hide_gem("red_key", Gems.KEY)
 
             if sprite.feet.colliderect(self.red_key_range) and check_gem(sprite, Gems.KEY):
                 self.game.door_manager.open_door_by_id("red_key_door")
 
-            if sprite.feet.collidelist(self.soft_wall_low_range) > -1 and check_skill(sprite, Skills.HAMMER):
+            if sprite.feet.collidelist(self.soft_wall_low_range) > -1 and \
+                    check_skill(sprite, Skills.HAMMER):
                 hide_layer("soft_wall_low")
-            if sprite.feet.collidelist(self.soft_wall_low_collider) > -1 and not check_skill(sprite, Skills.HAMMER):
+            if sprite.feet.collidelist(self.soft_wall_low_collider) > -1 and \
+                    not check_skill(sprite, Skills.HAMMER):
                 sprite.move_back(dt_)
-            if sprite.feet.collidelist(self.soft_wall_high_range) > -1 and check_skill(sprite, Skills.HAMMER):
+            if sprite.feet.collidelist(self.soft_wall_high_range) > -1 and \
+                    check_skill(sprite, Skills.HAMMER):
                 hide_layer("soft_wall_high")
-            if sprite.feet.collidelist(self.soft_wall_high_collider) > -1 and not check_skill(sprite, Skills.HAMMER):
+            if sprite.feet.collidelist(self.soft_wall_high_collider) > -1 and \
+                    not check_skill(sprite, Skills.HAMMER):
                 sprite.move_back(dt_)
 
             if sprite.feet.colliderect(self.gear_wall_range) and check_gem(sprite, Gems.GEAR):
@@ -331,14 +362,24 @@ class Ingame:
             if sprite.feet.collidelist(self.gear_wall_collider) > -1 and not self.gear_wall_opened:
                 sprite.move_back(dt_)
 
-            if sprite.feet.colliderect(self.gem_door_range) and check_gem(sprite, Gems.BLUE) and check_gem(sprite, Gems.RED) and check_gem(sprite, Gems.GREEN):
+            if sprite.feet.colliderect(self.gem_door_range) and \
+                    check_gem(sprite, Gems.BLUE) and \
+                    check_gem(sprite, Gems.RED) and \
+                    check_gem(sprite, Gems.GREEN):
                 self.game.door_manager.open_door_by_id("gem_door_one")
 
-            if sprite.feet.colliderect(self.final_gem_button_range) and check_gem(sprite, Gems.ORANGE) and check_gem(sprite, Gems.LEMON) and check_gem(sprite, Gems.PURPLE) and check_gem(sprite, Gems.PINK) and self.f_key_pressed is True:
+            if sprite.feet.colliderect(self.final_gem_button_range) and \
+                    check_gem(sprite, Gems.ORANGE) and \
+                    check_gem(sprite, Gems.LEMON) and \
+                    check_gem(sprite, Gems.PURPLE) and \
+                    check_gem(sprite, Gems.PINK) and \
+                    self.f_key_pressed is True:
                 self.f_key_pressed = False
                 self.water_wall_opened = True
                 hide_layer("water_empty")
-            if sprite.feet.collidelist(self.shallow_water_finish) > -1 and not self.water_wall_opened:
+
+            if sprite.feet.collidelist(self.shallow_water_finish) > -1 and \
+                    not self.water_wall_opened:
                 sprite.move_back(dt_)
 
             if sprite.feet.colliderect(self.music_door_collider) and not self.music_door_opened:
@@ -363,7 +404,8 @@ class Ingame:
             if sprite.feet.colliderect(self.button_house_range) and self.f_key_pressed is True:
                 self.game.door_manager.open_door_for_millis_by_id("button_door_two", 4000)
 
-            if sprite.feet.colliderect(self.house_door_collider) and not self.door_lever_water_enabled:
+            if sprite.feet.colliderect(self.house_door_collider) and \
+                    not self.door_lever_water_enabled:
                 sprite.move_back(dt_)
             if sprite.feet.colliderect(self.lever_water_range) and self.f_key_pressed is True:
                 self.f_key_pressed = False
@@ -381,7 +423,8 @@ class Ingame:
                     not get_layer_visibility(self.game.tmx_data, "lever_door_two")
                 )
 
-            if sprite.feet.colliderect(self.lever_door_one_collider) and not self.door_lever_one_enabled:
+            if sprite.feet.colliderect(self.lever_door_one_collider) and \
+                    not self.door_lever_one_enabled:
                 sprite.move_back(dt_)
             if sprite.feet.colliderect(self.lever_spawn_range) and self.f_key_pressed is True:
                 self.f_key_pressed = False
