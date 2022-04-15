@@ -2,7 +2,7 @@
 
 We take the security of our products seriously.
 
-If you believe you have found a security vulnerability in any of the used library's that meets our definition of a security vulnerabilty, please report it to us and we will try to resolve it asap.
+If you believe you have found a security vulnerability in any of the used library's that meets our definition of a security vulnerability, please report it to us and we will try to resolve it asap.
 
 ## Reporting Security Issues
 

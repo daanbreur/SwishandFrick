@@ -1,32 +1,41 @@
-import pygame
+"""Enums for inventory, skills, gamestate and more"""
 import enum
+import pygame
+
 
 @enum.unique
 class GameState(enum.Enum):
-  MAIN_MENU = enum.auto()
-  IN_GAME = enum.auto()
-  PAUSE_MENU = enum.auto()
-  SETTINGS = enum.auto()
+    """Enum for the game's state"""
+    MAIN_MENU = enum.auto()
+    IN_GAME = enum.auto()
+    PAUSE_MENU = enum.auto()
+    SETTINGS = enum.auto()
+
 
 @enum.unique
 class Gems(enum.Enum):
-  BLUE = enum.auto()
-  RED = enum.auto()
-  PURPLE = enum.auto()
-  GREEN = enum.auto()
-  ORANGE = enum.auto()
-  PINK = enum.auto()
-  LEMON = enum.auto()
-  GEAR = enum.auto()
-  KEY = enum.auto()
+    """Enum for all gems in the game"""
+    BLUE = enum.auto()
+    RED = enum.auto()
+    PURPLE = enum.auto()
+    GREEN = enum.auto()
+    ORANGE = enum.auto()
+    PINK = enum.auto()
+    LEMON = enum.auto()
+    GEAR = enum.auto()
+    KEY = enum.auto()
+
 
 @enum.unique
 class Skills(enum.Enum):
-  SWIM = enum.auto()
-  RUN = enum.auto()
-  HAMMER = enum.auto()
+    """Enum for the skills in the game"""
+    SWIM = enum.auto()
+    RUN = enum.auto()
+    HAMMER = enum.auto()
+
 
 @enum.unique
 class UserEvents(enum.IntEnum):
-  PAUSE_BLINK = pygame.USEREVENT
-  SIMON_SAYS_BLINK = enum.auto()
+    """Enum for the custom pygame userevents"""
+    PAUSE_BLINK = pygame.USEREVENT
+    SIMON_SAYS_BLINK = enum.auto()
