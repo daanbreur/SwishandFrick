@@ -85,7 +85,7 @@ def set_layer_visibility(
 
     Args:
         tmx_data (pytmx.TiledMap): TileMap data instance to modify
-        map_layer (pyscroll.BufferedRenderer): maplayer instance to modify
+        map_layer (pyscroll.BufferedRenderer): map_layer instance to modify
         layer_name (str): name of the layer to change visibility of
         visible (bool): the new visibility of the layer
     """

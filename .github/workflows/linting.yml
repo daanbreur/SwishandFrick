@@ -8,6 +8,9 @@ on:
     branches:
       - main
 
+env:
+  PYGAME_HIDE_SUPPORT_PROMPT: "1"
+
 jobs:
   lint:
     runs-on: ubuntu-latest

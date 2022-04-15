@@ -1,9 +1,11 @@
+"""Enums for inventory, skills, gamestate and more"""
 import enum
 import pygame
 
 
 @enum.unique
 class GameState(enum.Enum):
+    """Enum for the game's state"""
     MAIN_MENU = enum.auto()
     IN_GAME = enum.auto()
     PAUSE_MENU = enum.auto()
@@ -12,6 +14,7 @@ class GameState(enum.Enum):
 
 @enum.unique
 class Gems(enum.Enum):
+    """Enum for all gems in the game"""
     BLUE = enum.auto()
     RED = enum.auto()
     PURPLE = enum.auto()
@@ -25,6 +28,7 @@ class Gems(enum.Enum):
 
 @enum.unique
 class Skills(enum.Enum):
+    """Enum for the skills in the game"""
     SWIM = enum.auto()
     RUN = enum.auto()
     HAMMER = enum.auto()
@@ -32,5 +36,6 @@ class Skills(enum.Enum):
 
 @enum.unique
 class UserEvents(enum.IntEnum):
+    """Enum for the custom pygame userevents"""
     PAUSE_BLINK = pygame.USEREVENT
     SIMON_SAYS_BLINK = enum.auto()

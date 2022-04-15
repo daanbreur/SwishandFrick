@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 class ToastPopup:
     """ This class implements all toast logic. Used inside the ToastManager class
     """
-    def __init__(self, screen_dimensions: Tuple[int, int], text: str='', font_size: int=18) -> None:
+    def __init__(self, screen_dimensions: Tuple[int, int], text: str = '', font_size: int = 18) -> None:
         self.start_show_time: int = 0
         self._text: str = text
         self._font_color: Tuple[int, int, int] = (255, 255, 255)
@@ -61,7 +61,7 @@ class ToastManager:
         self._toast_queue: List[ToastPopup] = []
         self._screen: pygame.Surface = screen
 
-    def add_toast(self, text: str, font_size: int=18) -> None:
+    def add_toast(self, text: str, font_size: int = 18) -> None:
         """Add a new toast to the queue with given text and font size.
 
         Args:

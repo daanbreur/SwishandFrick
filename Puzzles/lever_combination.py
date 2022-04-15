@@ -80,7 +80,7 @@ class LeverCombination:
         self.entered_sequence = [False, False, False, False, False, False]
 
     def handle_input(self, event: pygame.event.Event) -> None:
-        """Handles user input, checks for collision with lever and turns it on or of
+        """Handles user input, checks for collision with lever and turns it on or off
 
         Args:
             event (pygame.event.Event): pygame event object

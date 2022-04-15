@@ -1,5 +1,4 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
 
 import logging
 import os
@@ -13,32 +12,32 @@ import pyscroll.data
 from pyscroll.group import PyscrollGroup
 from pytmx.util_pygame import load_pygame
 
-from colargulog import BraceFormatStyleFormatter, ColorCodes, ColorizedArgsFormatter
-
-from constants import *
-from utils import *
-
-from player import Player
-from door_manager import DoorManager
-from toast_manager import ToastManager
-from enums import GameState, Skills, UserEvents
-
 from Puzzles.konami_code import KonamiCode
 from Puzzles.lever_combination import LeverCombination
 from Puzzles.math import Math
 from Puzzles.morse_code import MorseCode
 from Puzzles.music import Music
 from Puzzles.simon_says import SimonSays
-
 from Screens.in_game import Ingame
 from Screens.main_menu import MainMenu
 from Screens.paused_menu import PausedMenu
 from Screens.settings_menu import SettingsMenu
 
+from colargulog import BraceFormatStyleFormatter, ColorizedArgsFormatter
+from player import Player
+from door_manager import DoorManager
+from toast_manager import ToastManager
+
+from enums import GameState, UserEvents, Skills
+from constants import RESOURCES_DIR, PLAYER_MOVE_SPEED, PLAYER_RUN_SPEED
+from utils import resource_path, initialize_screen
+
 os.environ["PYGAME_HIDE_SUPPORT_PROMPT"] = "1"
 
 
 def init_logging():
+    """Initialize color and file logger.
+    """
     root_logger = logging.getLogger()
     root_logger.setLevel(logging.DEBUG)
 

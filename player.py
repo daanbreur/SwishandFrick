@@ -1,4 +1,5 @@
 """player module: contains Player class."""
+# pylint: disable=R0902
 
 from __future__ import annotations
 from typing import TYPE_CHECKING, List
