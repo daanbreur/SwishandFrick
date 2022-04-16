@@ -46,9 +46,10 @@ jobs:
             OUT_FILE_NAME: swishandfrick
             ASSET_MIME: application/octet-stream
           - os: macos-latest
-            BUILD_CMD: >
-              pyinstaller swishandfrick.spec &&
+            BUILD_CMD: pyinstaller swishandfrick.spec
+            POST_BUILD_CMD: >
               cd dist/ &&
+              ls -R &&
               zip -r9 swishandfrick swishandfrick.app/
             OUT_FILE_NAME: swishandfrick.zip
             ASSET_MIME: application/zip
@@ -67,8 +68,14 @@ jobs:
           python -m pip install --upgrade pip wheel setuptools
           pip install -r requirements.txt
           pip install pyinstaller
+      - name: Pre-Build for ${{ matrix.os }}
+        if: ${{ matrix.PRE_BUILD_CMD != '' }}
+        run: ${{ matrix.PRE_BUILD_CMD }}
       - name: Build with pyinstaller for ${{ matrix.os }}
         run: ${{ matrix.BUILD_CMD }}
+      - name: Post-Build for ${{ matrix.os }}
+        if: ${{ matrix.POST_BUILD_CMD != '' }}
+        run: ${{ matrix.POST_BUILD_CMD }}
       - name: Upload Artifact for ItchIO Uploader
         uses: actions/upload-artifact@v3
         with:
