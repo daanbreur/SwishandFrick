@@ -1,0 +1,39 @@
+name: 🆕 Feature Request
+description: For feature requests. Please check if its already planned and read CONTRIBUTING
+title: "[FEATURE] <title_here>"
+labels: [Feature-Request]
+body:
+- type: checkboxes
+  attributes:
+    label: Is there an existing issue for this?
+    description: Please search to see if an issue already exists for the bug you encountered.
+    options:
+    - label: I have searched the existing issues and did not find any.
+      required: true
+- type: textarea
+  attributes:
+    label: Problem to be solved? Or just a fun idea!
+    description: A concise description of the problem to be addressed by this feature request. Please be clear what parts of the problem are considered to be in-scope and out-of-scope.
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Possible Solutions
+    description: |
+      A concise description of your preferred solution. Things to address include:
+      * Details of the technical implementation
+      * Tradeoffs made in design decisions
+      * Caveats and considerations for the future
+      Multiple suggestions allowed, Leave comparisons and pro's/con's for the end
+  validations:
+    required: false
+- type: checkboxes
+  attributes:
+    label: Code of Conduct
+    description: The Code of Conduct helps to keep the community safe. We require everyone to agree to it.
+    options:
+      - label: I agree to follow this project's [Code of Conduct](CODE_OF_CONDUCT.md)
+        required: true
+- type: markdown
+  attributes:
+    value: "**We would like to thank you for suggesting a feature!**"
